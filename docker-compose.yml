@@ -1,0 +1,46 @@
+version: "3"
+services:
+  postgres_users:
+    container_name: postgres_users
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+
+  api_nest:
+    restart: always
+    container_name: api_nest
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    depends_on:
+      - postgres_users 
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+      DATABASE_URL: postgres://user:password@postgres_users:5432/db
+      NODE_ENV: development
+      PORT: 3001
+    entrypoint:
+      - npm
+      - run
+      - start:dev
+    ports:
+      - "4000:3001"
+
+  pgadmin:
+    container_name: pgadmin4_container_users
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+networks:
+  postgres:
+    driver: bridge
