@@ -1,0 +1,21 @@
+import { Module } from '@nestjs/common';
+import { UsersModule } from 'src/app/domain/modules/user.module';
+import { AppController } from 'src/app/presentation/controllers/app.controller';
+import { AppService } from '../../presentation/services/app.service';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as ormconfig from '../../../ormconfig';
+
+@Module({
+  imports: [
+    UsersModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRoot({
+      ...ormconfig,
+      autoLoadEntities: true,
+    }),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
