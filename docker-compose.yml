@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 services:
   postgres_users:
     container_name: postgres_users
@@ -32,6 +32,8 @@ services:
       - start:dev
     ports:
       - "4000:3001"
+    volumes:
+      - ./:/app
 
 networks:
   postgres:
