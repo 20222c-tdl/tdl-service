@@ -4,12 +4,13 @@ import User from 'src/app/domain/entities/users/user.entity';
 import { LoginUserDTO } from 'src/app/infrastructure/dtos/users/user-login.dto';
 import { RegisterUserDTO } from 'src/app/infrastructure/dtos/users/user-register.dto';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: Repository<User>
   ) {}
 
   public getStatus(): string {
@@ -21,7 +22,7 @@ export class UsersService {
       throw new BadRequestException('This email is already in use!');
     }
 
-    return new User(await this.userRepository.save(newUser));
+    return await this.userRepository.save(new User(newUser));
   }
 
   public async loginUser(userCredentials: LoginUserDTO): Promise<User> {
@@ -30,14 +31,13 @@ export class UsersService {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', { email })
-      .andWhere('user.password = :password', { password })
       .getOne();
 
-    if (!user) {
-      throw new BadRequestException('Wrong credentials!');
+    if (user && bcrypt.compareSync(password, user.password)) {
+      return user;
     }
 
-    return user;
+    throw new BadRequestException('Wrong credentials!');
   }
 
   private async isRegistered(email: string) {
