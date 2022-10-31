@@ -54,4 +54,13 @@ export class UsersService {
 
     return !!user;
   }
+
+  public async existsUser(id: string) {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .getOne();
+      
+    return !!user;
+}
 }
