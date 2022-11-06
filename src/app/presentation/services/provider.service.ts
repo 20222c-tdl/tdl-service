@@ -3,6 +3,7 @@ import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-pro
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Provider } from '../../domain/entities/provider/provider.entity';
+import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 
 @Injectable()
 export class ProviderService {
@@ -19,8 +20,16 @@ export class ProviderService {
     return this.providerRepository.save(new Provider(createProviderDto));
   }
 
-  findAll() {
-    return this.providerRepository.find();
+  getProviders(providerOptionsDto: ProviderOptionsDto) {
+    const queryBuilder = this.providerRepository.createQueryBuilder('provider');
+
+    if (providerOptionsDto.categoryId) {
+      queryBuilder.where('provider.categoryId = :categoryId', {
+        categoryId: providerOptionsDto.categoryId,
+      });
+    }
+
+    return queryBuilder.getMany();
   }
 
   private async isProviderRegistered(createProviderDto: CreateProviderDto) {

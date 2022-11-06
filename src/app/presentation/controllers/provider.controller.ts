@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ProviderService } from '../services/provider.service';
 import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 
 @ApiTags('providers')
 @Controller('providers')
@@ -14,8 +15,8 @@ export class ProviderController {
   }
 
   @Get()
-  findAll() {
-    return this.providerService.findAll();
+  find(@Query() providerOptionsDto: ProviderOptionsDto) {
+    return this.providerService.getProviders(providerOptionsDto);
   }
 
   /*@Get(':id')
