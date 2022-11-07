@@ -40,6 +40,7 @@ export class Provider {
 
   @Column()
   @ApiProperty()
+  @Exclude()
   categoryId: string;
 
   @ManyToOne(() => Category, (category) => category.id)

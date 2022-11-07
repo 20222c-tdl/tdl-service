@@ -25,7 +25,9 @@ export class ProviderService {
   async getProviders(
     providerOptionsDto: ProviderOptionsDto,
   ): Promise<PageDto<Provider>> {
-    const queryBuilder = this.providerRepository.createQueryBuilder('provider');
+    const queryBuilder = this.providerRepository
+      .createQueryBuilder('provider')
+      .leftJoinAndSelect('provider.category', 'category');
 
     queryBuilder.skip(providerOptionsDto.skip).take(providerOptionsDto.take);
 
