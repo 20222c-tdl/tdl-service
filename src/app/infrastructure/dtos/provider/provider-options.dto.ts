@@ -1,9 +1,10 @@
 import { IsOptional, IsUUID } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { PageOptionsDto } from '../common/page-options.dto';
 
-export class ProviderOptionsDto {
+export class ProviderOptionsDto extends PageOptionsDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
-  categoryId: string;
+  readonly categoryId?: string;
 }

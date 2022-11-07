@@ -3,6 +3,8 @@ import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-pro
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Provider } from '../../domain/entities/provider/provider.entity';
+import { PageDto } from '../../infrastructure/dtos/common/page.dto';
+import { PageMetaDto } from '../../infrastructure/dtos/common/page-meta.dto';
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 
 @Injectable()
@@ -20,8 +22,12 @@ export class ProviderService {
     return this.providerRepository.save(new Provider(createProviderDto));
   }
 
-  getProviders(providerOptionsDto: ProviderOptionsDto) {
+  async getProviders(
+    providerOptionsDto: ProviderOptionsDto,
+  ): Promise<PageDto<Provider>> {
     const queryBuilder = this.providerRepository.createQueryBuilder('provider');
+
+    queryBuilder.skip(providerOptionsDto.skip).take(providerOptionsDto.take);
 
     if (providerOptionsDto.categoryId) {
       queryBuilder.where('provider.categoryId = :categoryId', {
@@ -29,7 +35,12 @@ export class ProviderService {
       });
     }
 
-    return queryBuilder.getMany();
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
+
+    const pageMetaDto = new PageMetaDto(providerOptionsDto, itemCount);
+
+    return new PageDto(entities, pageMetaDto);
   }
 
   private async isProviderRegistered(createProviderDto: CreateProviderDto) {
@@ -39,8 +50,4 @@ export class ProviderService {
 
     return provider !== null;
   }
-
-  /*findOne(id: number) {
-    return `This action returns a #${id} provider`;
-  }*/
 }

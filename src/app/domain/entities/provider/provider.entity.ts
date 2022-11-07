@@ -10,13 +10,16 @@ import {
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { Category } from '../categories/category.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Provider {
   @PrimaryGeneratedColumn('uuid')
+  @ApiProperty()
   public id: string;
 
   @Column()
+  @ApiProperty()
   public email: string;
 
   @Column()
@@ -24,15 +27,19 @@ export class Provider {
   public password: string;
 
   @Column()
+  @ApiProperty()
   public firstName: string;
 
   @Column()
+  @ApiProperty()
   public lastName: string;
 
   @Column()
+  @ApiProperty()
   public phoneNumber: string;
 
-  @Column({ nullable: true })
+  @Column()
+  @ApiProperty()
   categoryId: string;
 
   @ManyToOne(() => Category, (category) => category.id)
