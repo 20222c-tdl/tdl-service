@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/app/domain/entities/users/user.entity';
-import { LoginUserDTO } from 'src/app/infrastructure/dtos/users/user-login.dto';
+import { LoginDTO } from 'src/app/infrastructure/dtos/common/login.dto';
 import { RegisterUserDTO } from 'src/app/infrastructure/dtos/users/user-register.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -12,7 +12,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private readonly communitiesService: CommunitiesService
+    private readonly communitiesService: CommunitiesService,
   ) {}
 
   public getStatus(): string {
@@ -24,14 +24,14 @@ export class UsersService {
       throw new BadRequestException('This email is already in use!');
     }
 
-    if ( !(await this.communitiesService.existsCommunity(newUser.communityId))) {
+    if (!(await this.communitiesService.existsCommunity(newUser.communityId))) {
       throw new BadRequestException('This community does not exist!');
     }
 
     return await this.userRepository.save(new User(newUser));
   }
 
-  public async loginUser(userCredentials: LoginUserDTO): Promise<User> {
+  public async loginUser(userCredentials: LoginDTO): Promise<User> {
     const { email, password } = userCredentials;
 
     const user = await this.userRepository
