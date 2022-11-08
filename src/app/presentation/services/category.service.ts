@@ -3,9 +3,9 @@ import { CreateCategoryDto } from '../../infrastructure/dtos/categories/create-c
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from '../../domain/entities/categories/category.entity';
 import { Repository } from 'typeorm';
-import { PageMetaDto } from '../../infrastructure/dtos/common/page-meta.dto';
-import { PageDto } from '../../infrastructure/dtos/common/page.dto';
-import { PageOptionsDto } from '../../infrastructure/dtos/common/page-options.dto';
+import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-meta.dto';
+import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
+import { PageOptionsDto } from '../../infrastructure/dtos/common/pagination/page-options.dto';
 
 @Injectable()
 export class CategoryService {

@@ -3,9 +3,11 @@ import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-pro
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Provider } from '../../domain/entities/provider/provider.entity';
-import { PageDto } from '../../infrastructure/dtos/common/page.dto';
-import { PageMetaDto } from '../../infrastructure/dtos/common/page-meta.dto';
+import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
+import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-meta.dto';
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
+import * as bcrypt from 'bcrypt';
+import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
 
 @Injectable()
 export class ProviderService {
@@ -54,5 +56,20 @@ export class ProviderService {
       .getOne();
 
     return provider !== null;
+  }
+
+  public async login(providerCredentials: LoginDTO): Promise<Provider> {
+    const { email, password } = providerCredentials;
+
+    const user = await this.providerRepository
+      .createQueryBuilder('provider')
+      .where('provider.email = :email', { email })
+      .getOne();
+
+    if (user && bcrypt.compareSync(password, user.password)) {
+      return user;
+    }
+
+    throw new BadRequestException('Wrong credentials!');
   }
 }
