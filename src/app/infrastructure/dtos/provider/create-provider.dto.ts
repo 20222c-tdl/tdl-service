@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsPhoneNumber, IsUUID, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsIdentityCard,
+  IsPhoneNumber,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
 
 export class CreateProviderDto {
   @ApiProperty({ type: String, description: 'Email' })
@@ -17,6 +23,10 @@ export class CreateProviderDto {
   @ApiProperty({ type: String, description: 'Last Name' })
   @MinLength(2)
   lastName: string;
+
+  @ApiProperty({ type: String, description: 'Identity Number' })
+  @IsIdentityCard('any')
+  identityNumber: string;
 
   @ApiProperty({ type: String, description: 'Phone Number' })
   @IsPhoneNumber('AR')

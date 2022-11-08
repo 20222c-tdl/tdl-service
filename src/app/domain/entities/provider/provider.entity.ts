@@ -36,6 +36,10 @@ export class Provider {
 
   @Column()
   @ApiProperty()
+  public identityNumber: string;
+
+  @Column()
+  @ApiProperty()
   public phoneNumber: string;
 
   @Column()

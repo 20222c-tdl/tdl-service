@@ -46,9 +46,12 @@ export class ProviderService {
   }
 
   private async isProviderRegistered(createProviderDto: CreateProviderDto) {
-    const provider = await this.providerRepository.findOneBy({
-      email: createProviderDto.email,
-    });
+    const { email } = createProviderDto;
+
+    const provider = await this.providerRepository
+      .createQueryBuilder('provider')
+      .where('provider.email = :email', { email })
+      .getOne();
 
     return provider !== null;
   }
