@@ -5,10 +5,10 @@ import {
   Get,
   Post,
   UseInterceptors,
-  ValidationPipe
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoginUserDTO } from 'src/app/infrastructure/dtos/users/user-login.dto';
+import { LoginDTO } from 'src/app/infrastructure/dtos/common/login.dto';
 import { RegisterUserDTO } from 'src/app/infrastructure/dtos/users/user-register.dto';
 import { UsersService } from '../services/users.service';
 import User from '../../domain/entities/users/user.entity';
@@ -27,14 +27,18 @@ export class UsersController {
   @ApiTags('users')
   @ApiBody({ type: RegisterUserDTO })
   @Post()
-  async registerUser(@Body(ValidationPipe) newUser: RegisterUserDTO): Promise<User> {
+  async registerUser(
+    @Body(ValidationPipe) newUser: RegisterUserDTO,
+  ): Promise<User> {
     return this.userService.registerUser(newUser);
   }
 
   @ApiTags('users')
-  @ApiBody({ type: LoginUserDTO })
+  @ApiBody({ type: LoginDTO })
   @Post('/user/login')
-  async loginUser(@Body(ValidationPipe) userCredentials: LoginUserDTO): Promise<User> {
+  async loginUser(
+    @Body(ValidationPipe) userCredentials: LoginDTO,
+  ): Promise<User> {
     return this.userService.loginUser(userCredentials);
   }
 }
