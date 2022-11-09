@@ -10,13 +10,13 @@ import Claim from 'src/app/domain/entities/claims/claim.entity';
 import { UsersService } from './users.service';
 import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-by-community.dto';
 import { RegisterClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-register.dto';
+import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
 
 @Injectable()
 export class ClaimsService {
   constructor(
     @InjectRepository(Claim)
     private claimRepository: Repository<Claim>,
-    private readonly claimsService: ClaimsService,
     private readonly communitiesService: CommunitiesService,
     private readonly usersService: UsersService
   ) {}
@@ -35,11 +35,11 @@ export class ClaimsService {
         throw new BadRequestException('This user does not exist!');
     }
 
-    return await this.claimRepository.save(new Claim(newClaim));
+    return await this.claimRepository.save(new Claim({...newClaim, status: ClaimStatus.OPEN}));
   }
 
 
-  private async getClaimsByCommunity(claimsByCommunityDTO: ClaimsByCommunityDTO) {
+  public async getClaimsByCommunity(claimsByCommunityDTO: ClaimsByCommunityDTO): Promise<Claim[]> {
     const { communityId } = claimsByCommunityDTO;
 
 
@@ -47,11 +47,11 @@ export class ClaimsService {
         throw new BadRequestException('This community does not exist!');
     }
 
-    const communities = await this.claimRepository
+    const claims = await this.claimRepository
       .createQueryBuilder('claim')
       .where('claim.communityId = :communityId', { communityId })
       .getMany();
 
-    return !!communities;
+    return claims;
   }
 }
