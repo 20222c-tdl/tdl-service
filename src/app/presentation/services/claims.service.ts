@@ -9,6 +9,7 @@ import { RegisterClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-regis
 import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
 import { UpdateClaimStatusDTO } from 'src/app/infrastructure/dtos/claims/claim-update-status.dto';
 import User from 'src/app/domain/entities/users/user.entity';
+import { ClaimsByUserDTO } from 'src/app/infrastructure/dtos/claims/claims-by-user.dto';
 
 
 @Injectable()
@@ -65,5 +66,9 @@ export class ClaimsService {
     await this.claimRepository.createQueryBuilder().update(Claim).set({status}).where('id = :id', {id}).execute();
 
     return this.claimRepository.findOne({where : {id}});
+  }
+
+  public async getClaimsByUser(claimsByUserDto: ClaimsByUserDTO): Promise<Claim[]> {
+    return await this.claimRepository.find({where: {userId: claimsByUserDto.userId}});
   }
 }

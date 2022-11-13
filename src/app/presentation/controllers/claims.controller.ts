@@ -17,6 +17,7 @@ import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-
 import { UpdateClaimStatusDTO } from 'src/app/infrastructure/dtos/claims/claim-update-status.dto';
 import User from 'src/app/domain/entities/users/user.entity';
 import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
+import { ClaimsByUserDTO } from 'src/app/infrastructure/dtos/claims/claims-by-user.dto';
   
   @UseInterceptors(ClassSerializerInterceptor)
   @Controller('/claims')
@@ -47,6 +48,19 @@ import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status'
     async getClaimsByCommunity(
         @Param('communityId') communityId: string): Promise<{claim: Claim, user: User }[]> {
       return await this.claimService.getClaimsByCommunity(new ClaimsByCommunityDTO(communityId));
+    }
+
+    @ApiTags('claims')
+    @ApiParam({
+        name: 'userId',
+        description: 'ID necessary for getting all user claims',
+        required: true,
+        type: String,
+      })
+    @Get('/user/:userId')
+    async getClaimsByUser(
+        @Param('userId') userId: string): Promise<Claim[]> {
+      return await this.claimService.getClaimsByUser(new ClaimsByUserDTO(userId));
     }
 
     @ApiTags('claims')
