@@ -1,16 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import User from 'src/app/domain/entities/users/user.entity';
-import { LoginUserDTO } from 'src/app/infrastructure/dtos/users/user-login.dto';
-import { RegisterUserDTO } from 'src/app/infrastructure/dtos/users/user-register.dto';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { CommunitiesService } from './community.service';
 import Claim from 'src/app/domain/entities/claims/claim.entity';
 import { UsersService } from './users.service';
 import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-by-community.dto';
 import { RegisterClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-register.dto';
 import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
+import { UpdateClaimStatusDTO } from 'src/app/infrastructure/dtos/claims/claim-update-status.dto';
+import User from 'src/app/domain/entities/users/user.entity';
+
 
 @Injectable()
 export class ClaimsService {
@@ -39,7 +38,7 @@ export class ClaimsService {
   }
 
 
-  public async getClaimsByCommunity(claimsByCommunityDTO: ClaimsByCommunityDTO): Promise<Claim[]> {
+  public async getClaimsByCommunity(claimsByCommunityDTO: ClaimsByCommunityDTO): Promise<{claim: Claim, user: User }[]> {
     const { communityId } = claimsByCommunityDTO;
 
 
@@ -52,6 +51,19 @@ export class ClaimsService {
       .where('claim.communityId = :communityId', { communityId })
       .getMany();
 
-    return claims;
+    let claimsWithUser = [];
+    for (const claim of claims) {
+      const user = (await this.usersService.getUserById(claim.userId));
+      claimsWithUser.push({claim, user});
+    };
+
+    console.log("claimsWithUser", claimsWithUser);
+    return await claimsWithUser
+  }
+
+  public async updateClaimStatus(id: string, status: ClaimStatus): Promise<Claim> {
+    await this.claimRepository.createQueryBuilder().update(Claim).set({status}).where('id = :id', {id}).execute();
+
+    return this.claimRepository.findOne({where : {id}});
   }
 }

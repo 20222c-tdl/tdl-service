@@ -4,6 +4,7 @@ import {
     Controller,
     Get,
     Param,
+    Patch,
     Post,
     UseInterceptors,
     ValidationPipe
@@ -13,6 +14,9 @@ import { ClaimsService } from '../services/claims.service';
 import { RegisterClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-register.dto';
 import Claim from 'src/app/domain/entities/claims/claim.entity';
 import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-by-community.dto';
+import { UpdateClaimStatusDTO } from 'src/app/infrastructure/dtos/claims/claim-update-status.dto';
+import User from 'src/app/domain/entities/users/user.entity';
+import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
   
   @UseInterceptors(ClassSerializerInterceptor)
   @Controller('/claims')
@@ -28,7 +32,7 @@ import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-
     @ApiTags('claims')
     @ApiBody({ type: RegisterClaimDTO })
     @Post()
-    async registerUser(@Body(ValidationPipe) newClaim: RegisterClaimDTO): Promise<Claim> {
+    async registerClaim(@Body(ValidationPipe) newClaim: RegisterClaimDTO): Promise<Claim> {
       return this.claimService.registerClaim(newClaim);
     }
   
@@ -40,8 +44,28 @@ import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-
         type: String,
       })
     @Get('/community/:communityId')
-    async loginUser(
-        @Param('communityId') communityId: string): Promise<Claim[]> {
-      return this.claimService.getClaimsByCommunity(new ClaimsByCommunityDTO(communityId));
+    async getClaimsByCommunity(
+        @Param('communityId') communityId: string): Promise<{claim: Claim, user: User }[]> {
+      return await this.claimService.getClaimsByCommunity(new ClaimsByCommunityDTO(communityId));
+    }
+
+    @ApiTags('claims')
+    @ApiParam({
+      name: 'claimId',
+      description: 'ID necessary for updating claim status',
+      required: true,
+      type: String,
+    })
+    @ApiParam({
+      name: 'status',
+      description: 'Status necessary for updating claim status',
+      required: true,
+      enum: ClaimStatus,
+    })
+    @Patch('/:claimId/status/:status')
+    async updateClaimStatus(
+      @Param('claimId') claimId: string,
+      @Param('status') status: ClaimStatus,): Promise<Claim> {
+      return this.claimService.updateClaimStatus(claimId, status);
     }
   }
