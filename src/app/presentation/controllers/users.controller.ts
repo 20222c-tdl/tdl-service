@@ -8,8 +8,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoginDTO } from 'src/app/infrastructure/dtos/common/login.dto';
-import { RegisterUserDTO } from 'src/app/infrastructure/dtos/users/user-register.dto';
+import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
+import { RegisterUserDTO } from '../../infrastructure/dtos/users/user-register.dto';
 import { UsersService } from '../services/users.service';
 import User from '../../domain/entities/users/user.entity';
 

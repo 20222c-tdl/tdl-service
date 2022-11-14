@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommunityController } from "src/app/presentation/controllers/community,controller";
-import { CommunitiesService } from "src/app/presentation/services/community.service";
+import { CommunityController } from "../../presentation/controllers/community.controller";
+import { CommunitiesService } from "../../presentation/services/community.service";
 import Community from "../entities/communities/community.entity";
 
 

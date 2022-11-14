@@ -14,10 +14,10 @@ import { ClaimsService } from '../services/claims.service';
 import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-register.dto';
 import Claim from '../../domain/entities/claims/claim.entity';
 import { ClaimsByCommunityDTO } from '../../infrastructure/dtos/claims/claims-by-community.dto';
-import User from 'src/app/domain/entities/users/user.entity';
-import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
-import { ClaimsByUserDTO } from 'src/app/infrastructure/dtos/claims/claims-by-user.dto';
-import { UpdateClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-update.dto';
+import User from '../../domain/entities/users/user.entity';
+import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
+import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
+import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
   
   @UseInterceptors(ClassSerializerInterceptor)
   @Controller('/claims')

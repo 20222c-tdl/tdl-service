@@ -9,7 +9,7 @@ import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-registe
 import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
 import User from '../../domain/entities/users/user.entity';
 import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
-import { UpdateClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-update.dto';
+import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
 
 
 @Injectable()
