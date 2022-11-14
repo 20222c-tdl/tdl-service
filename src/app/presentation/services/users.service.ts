@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import User from 'src/app/domain/entities/users/user.entity';
-import { LoginDTO } from 'src/app/infrastructure/dtos/common/login.dto';
-import { RegisterUserDTO } from 'src/app/infrastructure/dtos/users/user-register.dto';
+import User from '../../domain/entities/users/user.entity';
+import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
+import { RegisterUserDTO } from '../../infrastructure/dtos/users/user-register.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CommunitiesService } from './community.service';
