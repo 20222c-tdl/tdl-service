@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from 'src/app/domain/modules/user.module';
-import { AppController } from 'src/app/presentation/controllers/app.controller';
+import { UsersModule } from '../../domain/modules/user.module';
+import { AppController } from '../../presentation/controllers/app.controller';
 import { AppService } from '../../presentation/services/app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as ormconfig from '../../../ormconfig';
-import { CommunitiesModule } from 'src/app/domain/modules/community.module';
-import { ClaimsModule } from 'src/app/domain/modules/claim.module';
+import { CommunitiesModule } from '../../domain/modules/community.module';
+import { ClaimsModule } from '../../domain/modules/claim.module';
 import { ProviderModule } from '../../domain/modules/provider.module';
 
 @Module({

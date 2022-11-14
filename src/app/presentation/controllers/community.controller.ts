@@ -8,10 +8,10 @@ import {
     ValidationPipe
   } from '@nestjs/common';
   import { ApiBody, ApiTags } from '@nestjs/swagger';
-import Community from 'src/app/domain/entities/communities/community.entity';
+import Community from '../../domain/entities/communities/community.entity';
 import { CommunitiesService } from '../services/community.service';
-import { RegisterCommunityDTO } from 'src/app/infrastructure/dtos/communities/community-register.dto';
-import { LoginCommunityDTO } from 'src/app/infrastructure/dtos/communities/community-login.dto';
+import { RegisterCommunityDTO } from '../../infrastructure/dtos/communities/community-register.dto';
+import { LoginCommunityDTO } from '../../infrastructure/dtos/communities/community-login.dto';
 RegisterCommunityDTO
   @UseInterceptors(ClassSerializerInterceptor)
   @Controller('/communities')
