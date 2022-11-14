@@ -31,7 +31,7 @@ export class ClaimsService {
     }
 
     if ( !(await this.usersService.existsUser(newClaim.userId))) {
-        throw new BadRequestException('This user does not exist!');
+      throw new BadRequestException('This user does not exist!');
     }
 
     return await this.claimRepository.save(new Claim({...newClaim, status: ClaimStatus.OPEN}));
@@ -60,7 +60,7 @@ export class ClaimsService {
     console.log("claimsWithUser", claimsWithUser);
     return await claimsWithUser
   }
-
+ 
   public async updateClaimStatus(id: string, status: ClaimStatus): Promise<Claim> {
     await this.claimRepository.createQueryBuilder().update(Claim).set({status}).where('id = :id', {id}).execute();
 
