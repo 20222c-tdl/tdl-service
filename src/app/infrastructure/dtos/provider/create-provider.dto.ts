@@ -6,7 +6,7 @@ import {
   IsUUID,
   MinLength,
 } from 'class-validator';
-
+// TODO: Add validation for the phone number and the identity card
 export class CreateProviderDto {
   @ApiProperty({ type: String, description: 'Email' })
   @IsEmail()
@@ -25,11 +25,9 @@ export class CreateProviderDto {
   lastName: string;
 
   @ApiProperty({ type: String, description: 'Identity Number' })
-  @IsIdentityCard('any')
   identityNumber: string;
 
   @ApiProperty({ type: String, description: 'Phone Number' })
-  @IsPhoneNumber('AR')
   phoneNumber: string;
 
   @ApiProperty({ type: String, description: 'Community Id' })
