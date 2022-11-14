@@ -2,14 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommunitiesService } from './community.service';
-import Claim from 'src/app/domain/entities/claims/claim.entity';
+import Claim from '../../domain/entities/claims/claim.entity';
 import { UsersService } from './users.service';
-import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/cliams-by-community.dto';
-import { RegisterClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-register.dto';
-import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
-import { UpdateClaimStatusDTO } from 'src/app/infrastructure/dtos/claims/claim-update-status.dto';
-import User from 'src/app/domain/entities/users/user.entity';
-import { ClaimsByUserDTO } from 'src/app/infrastructure/dtos/claims/claims-by-user.dto';
+import { ClaimsByCommunityDTO } from '../../infrastructure/dtos/claims/claims-by-community.dto';
+import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-register.dto';
+import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
+import User from '../../domain/entities/users/user.entity';
+import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
 
 
 @Injectable()
@@ -32,7 +31,7 @@ export class ClaimsService {
     }
 
     if ( !(await this.usersService.existsUser(newClaim.userId))) {
-        throw new BadRequestException('This user does not exist!');
+      throw new BadRequestException('This user does not exist!');
     }
 
     return await this.claimRepository.save(new Claim({...newClaim, status: ClaimStatus.OPEN}));
@@ -61,7 +60,7 @@ export class ClaimsService {
     console.log("claimsWithUser", claimsWithUser);
     return await claimsWithUser
   }
-
+ 
   public async updateClaimStatus(id: string, status: ClaimStatus): Promise<Claim> {
     await this.claimRepository.createQueryBuilder().update(Claim).set({status}).where('id = :id', {id}).execute();
 
