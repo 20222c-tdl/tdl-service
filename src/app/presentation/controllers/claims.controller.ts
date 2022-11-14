@@ -11,9 +11,9 @@ import {
   } from '@nestjs/common';
   import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ClaimsService } from '../services/claims.service';
-import { RegisterClaimDTO } from 'src/app/infrastructure/dtos/claims/claim-register.dto';
-import Claim from 'src/app/domain/entities/claims/claim.entity';
-import { ClaimsByCommunityDTO } from 'src/app/infrastructure/dtos/claims/claims-by-community.dto';
+import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-register.dto';
+import Claim from '../../domain/entities/claims/claim.entity';
+import { ClaimsByCommunityDTO } from '../../infrastructure/dtos/claims/claims-by-community.dto';
 import User from 'src/app/domain/entities/users/user.entity';
 import { ClaimStatus } from 'src/app/domain/entities/claims/claim.entity.status';
 import { ClaimsByUserDTO } from 'src/app/infrastructure/dtos/claims/claims-by-user.dto';
