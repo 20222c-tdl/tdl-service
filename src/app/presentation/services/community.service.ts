@@ -10,7 +10,7 @@ import { LoginCommunityDTO } from '../../infrastructure/dtos/communities/communi
 export class CommunitiesService {
   constructor(
     @InjectRepository(Community)
-    private communityRepository: Repository<Community>
+    private communityRepository: Repository<Community>,
   ) {}
 
   public getStatus(): string {
@@ -51,11 +51,11 @@ export class CommunitiesService {
 
   public async existsCommunity(communityId: string) {
     const id = communityId;
-    const community =await this.communityRepository
+    const community = await this.communityRepository
       .createQueryBuilder('community')
       .where('community.id = :id', { id })
       .getOne();
-    
+
     return !!community;
   }
 

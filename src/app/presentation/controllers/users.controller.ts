@@ -7,7 +7,7 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
 import { RegisterUserDTO } from '../../infrastructure/dtos/users/user-register.dto';
 import { UsersService } from '../services/users.service';
@@ -35,6 +35,7 @@ export class UsersController {
 
   @ApiTags('users')
   @ApiBody({ type: LoginDTO })
+  @ApiOperation({ deprecated: true })
   @Post('/user/login')
   async loginUser(
     @Body(ValidationPipe) userCredentials: LoginDTO,
