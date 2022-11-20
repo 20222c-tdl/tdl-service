@@ -9,6 +9,7 @@ import { ProviderModule } from '../app/domain/modules/provider.module';
 import { LocalProviderStrategy } from './local-provider.strategy';
 import { CommunitiesModule } from '../app/domain/modules/community.module';
 import { LocalCommunityStrategy } from './local-community.strategy';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { LocalCommunityStrategy } from './local-community.strategy';
     LocalCommunityStrategy,
     LocalStrategy,
     LocalProviderStrategy,
+    JwtStrategy,
   ],
   exports: [AuthService],
 })

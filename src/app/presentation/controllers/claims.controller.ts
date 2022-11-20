@@ -5,11 +5,11 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  Post, UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ClaimsService } from '../services/claims.service';
 import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-register.dto';
 import Claim from '../../domain/entities/claims/claim.entity';
@@ -18,6 +18,7 @@ import User from '../../domain/entities/users/user.entity';
 import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
 import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
 import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
+import { JwtAuthGuard } from '../../../auth/jwt-auth.guard';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('/claims')
@@ -30,6 +31,8 @@ export class ClaimsController {
     return this.claimService.getStatus();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiTags('claims')
   @ApiBody({ type: RegisterClaimDTO })
   @Post()

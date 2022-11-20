@@ -25,6 +25,9 @@ export class CommunitiesService {
     return await this.communityRepository.save(new Community(newCommunity));
   }
 
+  /**
+   * @deprecated
+   */
   public async loginCommunity(communityCredentials: LoginCommunityDTO): Promise<Community> {
     const { email, password } = communityCredentials;
 

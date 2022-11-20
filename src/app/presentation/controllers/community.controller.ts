@@ -7,7 +7,7 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import Community from '../../domain/entities/communities/community.entity';
 import { CommunitiesService } from '../services/community.service';
 import { RegisterCommunityDTO } from '../../infrastructure/dtos/communities/community-register.dto';
@@ -40,6 +40,7 @@ export class CommunityController {
   }
 
   @ApiTags('communities')
+  @ApiOperation({ deprecated: true })
   @ApiBody({ type: LoginCommunityDTO })
   @Post('/community/login')
   async loginCommunity(@Body(ValidationPipe) communityCredentials: LoginCommunityDTO): Promise<Community> {

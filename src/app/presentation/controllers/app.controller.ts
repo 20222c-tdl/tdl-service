@@ -2,10 +2,11 @@ import { Body, Controller, Post, UseGuards, ValidationPipe } from '@nestjs/commo
 import { AuthService } from '../../../auth/auth.service';
 import { LocalAuthGuard } from '../../../auth/local-auth.guard';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { LocalProviderAuthGuard } from '../../../auth/local-provider-auth.guard';
 import { LocalCommunityAuthGuard } from '../../../auth/local-community-auth.guard';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AppController {
   constructor(private authService: AuthService) {}
