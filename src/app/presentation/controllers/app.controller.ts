@@ -1,24 +1,33 @@
-import { Body, Controller, Get, Post, UseGuards, ValidationPipe } from '@nestjs/common';
-import { AppService } from '../services/app.service';
+import { Body, Controller, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthService } from '../../../auth/auth.service';
 import { LocalAuthGuard } from '../../../auth/local-auth.guard';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
 import { ApiBody } from '@nestjs/swagger';
+import { LocalProviderAuthGuard } from '../../../auth/local-provider-auth.guard';
+import { LocalCommunityAuthGuard } from '../../../auth/local-community-auth.guard';
 
-@Controller()
+@Controller('auth')
 export class AppController {
-  constructor(private readonly appService: AppService,
-              private authService: AuthService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+  constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDTO })
-  @Post('auth/login')
-  async login(@Body(ValidationPipe) credentials: LoginDTO) {
-    return this.authService.login(credentials);
+  @Post('users/login')
+  async userLogin(@Body(ValidationPipe) credentials: LoginDTO) {
+    return this.authService.loginUser(credentials);
+  }
+
+  @UseGuards(LocalProviderAuthGuard)
+  @ApiBody({ type: LoginDTO })
+  @Post('providers/login')
+  async providerLogin(@Body(ValidationPipe) credentials: LoginDTO) {
+    return this.authService.loginProvider(credentials);
+  }
+
+  @UseGuards(LocalCommunityAuthGuard)
+  @ApiBody({ type: LoginDTO })
+  @Post('communities/login')
+  async communityLogin(@Body(ValidationPipe) credentials: LoginDTO) {
+    return this.authService.loginCommunity(credentials);
   }
 }

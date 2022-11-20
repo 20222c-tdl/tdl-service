@@ -9,5 +9,6 @@ import Community from '../entities/communities/community.entity';
   imports: [TypeOrmModule.forFeature([Community])],
   controllers: [CommunityController],
   providers: [CommunitiesService],
+  exports: [CommunitiesService]
 })
 export class CommunitiesModule {}

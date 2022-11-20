@@ -62,4 +62,11 @@ export class CommunitiesService {
   public async getAllCommunities(): Promise<Community[]> {
     return await this.communityRepository.find();
   }
+
+  public findCommunity(email: string): Promise<Community> {
+    return this.communityRepository
+      .createQueryBuilder('community')
+      .where('community.email = :email', { email })
+      .getOne();
+  }
 }
