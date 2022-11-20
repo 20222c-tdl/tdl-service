@@ -13,10 +13,6 @@ export class CommunitiesService {
     private communityRepository: Repository<Community>,
   ) {}
 
-  public getStatus(): string {
-    return 'Community Service is running!';
-  }
-
   public async registerCommunity(newCommunity: RegisterCommunityDTO): Promise<Community> {
     if (await this.isRegistered(newCommunity.email)) {
       throw new BadRequestException('This email is already in use!');

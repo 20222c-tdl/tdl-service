@@ -1,30 +1,15 @@
-import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  Get,
-  Post,
-  UseInterceptors,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
 import { RegisterUserDTO } from '../../infrastructure/dtos/users/user-register.dto';
 import { UsersService } from '../services/users.service';
 import User from '../../domain/entities/users/user.entity';
 
-@UseInterceptors(ClassSerializerInterceptor)
+@ApiTags('Users')
 @Controller('/users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @ApiTags('users')
-  @Get()
-  getStatus(): string {
-    return this.userService.getStatus();
-  }
-
-  @ApiTags('users')
   @ApiBody({ type: RegisterUserDTO })
   @Post()
   async registerUser(
@@ -33,7 +18,6 @@ export class UsersController {
     return this.userService.registerUser(newUser);
   }
 
-  @ApiTags('users')
   @ApiBody({ type: LoginDTO })
   @ApiOperation({ deprecated: true })
   @Post('/user/login')

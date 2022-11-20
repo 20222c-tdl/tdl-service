@@ -8,7 +8,6 @@ export class LocalCommunityStrategy extends PassportStrategy(Strategy, 'communit
   constructor(private authService: AuthService) {
     super({
       usernameField: 'email',
-      passwordField: 'password',
     });
   }
 

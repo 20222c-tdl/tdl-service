@@ -21,10 +21,6 @@ export class ClaimsService {
     private readonly usersService: UsersService,
   ) {}
 
-  public getStatus(): string {
-    return 'Claim Service is running!';
-  }
-
   public async registerClaim(newClaim: RegisterClaimDTO): Promise<Claim> {
 
     if (!(await this.communitiesService.existsCommunity(newClaim.communityId))) {

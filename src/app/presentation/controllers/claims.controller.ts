@@ -1,12 +1,12 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
   Patch,
-  Post, UseGuards,
-  UseInterceptors,
+  Post,
+  Request,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
@@ -20,27 +20,23 @@ import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user
 import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
 import { JwtAuthGuard } from '../../../auth/jwt-auth.guard';
 
-@UseInterceptors(ClassSerializerInterceptor)
+@ApiTags('Claims')
 @Controller('/claims')
 export class ClaimsController {
   constructor(private readonly claimService: ClaimsService) {}
 
-  @ApiTags('claims')
-  @Get()
-  getStatus(): string {
-    return this.claimService.getStatus();
-  }
-
+  // TODO: solo un User puede consumirlo
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiTags('claims')
   @ApiBody({ type: RegisterClaimDTO })
   @Post()
-  async registerClaim(@Body(ValidationPipe) newClaim: RegisterClaimDTO): Promise<Claim> {
+  async registerClaim(@Request() req,
+                      @Body(ValidationPipe) newClaim: RegisterClaimDTO): Promise<Claim> {
     return this.claimService.registerClaim(newClaim);
   }
 
-  @ApiTags('claims')
+  // TODO: solo un Community puede consumirlo
+  //  y el param communityId debe coincider con el sub del token
   @ApiParam({
     name: 'communityId',
     description: 'ID necessary for getting all community claims',
@@ -53,7 +49,7 @@ export class ClaimsController {
     return await this.claimService.getClaimsByCommunity(new ClaimsByCommunityDTO(communityId));
   }
 
-  @ApiTags('claims')
+  // TODO: ¿quien lo consume?
   @ApiParam({
     name: 'userId',
     description: 'ID necessary for getting all user claims',
@@ -66,7 +62,7 @@ export class ClaimsController {
     return await this.claimService.getClaimsByUser(new ClaimsByUserDTO(userId));
   }
 
-  @ApiTags('claims')
+  // TODO: user creador y community
   @ApiParam({
     name: 'claimId',
     description: 'ID necessary for updating claim status',
@@ -86,7 +82,7 @@ export class ClaimsController {
     return this.claimService.updateClaimStatus(claimId, status);
   }
 
-  @ApiTags('claims')
+  // TODO: solo el user creador puede modificarlo
   @ApiParam({
     name: 'claimId',
     description: 'ID necessary for updating claim status',

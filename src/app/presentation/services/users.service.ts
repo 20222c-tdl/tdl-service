@@ -15,10 +15,6 @@ export class UsersService {
     private readonly communitiesService: CommunitiesService,
   ) {}
 
-  public getStatus(): string {
-    return 'User Service is running!';
-  }
-
   public async registerUser(newUser: RegisterUserDTO): Promise<User> {
     if (await this.isRegistered(newUser.email)) {
       throw new BadRequestException('This email is already in use!');

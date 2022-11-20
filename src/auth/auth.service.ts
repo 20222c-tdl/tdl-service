@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../app/presentation/services/users.service';
-import { LoginDTO } from '../app/infrastructure/dtos/common/login.dto';
 import User from '../app/domain/entities/users/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ProviderService } from '../app/presentation/services/provider.service';
-import { Provider } from '../app/domain/entities/provider/provider.entity';
 import { CommunitiesService } from '../app/presentation/services/community.service';
 
 
@@ -18,52 +16,38 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  public async validateUser(email: string, password: string): Promise<User | null> {
+  public async login(user: any) {
+    return this.getToken(user.email, user)
+  }
+
+  public async validateUser(email: string, password: string): Promise<Partial<User> | null> {
     const user = await this.usersService.findUser(email);
     if (user && bcrypt.compareSync(password, user.password)) {
-      return user;
+      const { password, ...result } = user;
+      return result;
     }
     return null;
   }
 
-  public async loginUser(credentials: LoginDTO) {
-    const { email } = credentials;
-    const { password, ...user } = await this.usersService.findUser(email);
-
-    return this.getToken(email, user)
-  }
-
-  async validateProvider(email: string, password: string) {
-    const user = await this.providersService.findProvider(email);
-    if (user && bcrypt.compareSync(password, user.password)) {
-      return user;
+  public async validateProvider(email: string, password: string) {
+    const provider = await this.providersService.findProvider(email);
+    if (provider && bcrypt.compareSync(password, provider.password)) {
+      const { password, ...result } = provider;
+      return result;
     }
     return null;
-  }
-
-  public async loginProvider(credentials: LoginDTO) {
-    const { email } = credentials;
-    const { password, ...user } = await this.providersService.findProvider(email);
-
-    return this.getToken(email, user);
   }
 
   public async validateCommunity(email: string, password: string) {
     const community = await this.communitiesService.findCommunity(email);
     if (community && bcrypt.compareSync(password, community.password)) {
-      return community;
+      const { password, ...result } = community;
+      return result;
     }
     return null;
   }
 
-  public async loginCommunity(credentials: LoginDTO) {
-    const { email } = credentials;
-    const { password, ...user } = await this.communitiesService.findCommunity(email);
-
-    return this.getToken(email, user);
-  }
-
-  private getToken(email: string, user: Partial<Provider | User>) {
+  private getToken(email: string, user: any) {
     const payload = {
       email,
       sub: user.id,
