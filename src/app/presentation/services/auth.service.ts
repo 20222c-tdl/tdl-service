@@ -17,7 +17,7 @@ export class AuthService {
   ) {}
 
   public async login(user: any) {
-    return this.getToken(user.email, user)
+    return this.getToken(user)
   }
 
   public async validateUser(email: string, password: string): Promise<Partial<User> | null> {
@@ -53,15 +53,14 @@ export class AuthService {
     return null;
   }
 
-  private getToken(email: string, user: any) {
+  private getToken(user: any) {
     const payload = {
-      email,
+      user,
       sub: user.id,
       role: user.role,
     };
 
     return {
-      ...user,
       access_token: this.jwtService.sign(payload),
     };
   }
