@@ -22,28 +22,34 @@ export class AuthService {
 
   public async validateUser(email: string, password: string): Promise<Partial<User> | null> {
     const user = await this.usersService.findUser(email);
+
     if (user && bcrypt.compareSync(password, user.password)) {
       const { password, ...result } = user;
       return result;
     }
+
     return null;
   }
 
   public async validateProvider(email: string, password: string) {
     const provider = await this.providersService.findProvider(email);
+
     if (provider && bcrypt.compareSync(password, provider.password)) {
       const { password, ...result } = provider;
       return result;
     }
+
     return null;
   }
 
   public async validateCommunity(email: string, password: string) {
     const community = await this.communitiesService.findCommunity(email);
+
     if (community && bcrypt.compareSync(password, community.password)) {
       const { password, ...result } = community;
       return result;
     }
+
     return null;
   }
 
@@ -51,6 +57,7 @@ export class AuthService {
     const payload = {
       email,
       sub: user.id,
+      role: user.role,
     };
 
     return {

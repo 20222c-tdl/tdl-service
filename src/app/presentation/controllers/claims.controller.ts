@@ -5,7 +5,6 @@ import {
   Param,
   Patch,
   Post,
-  Request,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -19,19 +18,21 @@ import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
 import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
 import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
 import { JwtAuthGuard } from '../../../auth/jwt-auth.guard';
+import { Role } from '../../domain/entities/roles/role.enum';
+import { HasRoles } from '../../../auth/has-roles.decorator';
+import { RolesGuard } from '../../../auth/roles.guard';
 
 @ApiTags('Claims')
 @Controller('/claims')
 export class ClaimsController {
   constructor(private readonly claimService: ClaimsService) {}
 
-  // TODO: solo un User puede consumirlo
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiBody({ type: RegisterClaimDTO })
   @Post()
-  async registerClaim(@Request() req,
-                      @Body(ValidationPipe) newClaim: RegisterClaimDTO): Promise<Claim> {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @HasRoles(Role.USER)
+  async registerClaim(@Body(ValidationPipe) newClaim: RegisterClaimDTO): Promise<Claim> {
     return this.claimService.registerClaim(newClaim);
   }
 
