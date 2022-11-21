@@ -10,12 +10,8 @@ import { LoginCommunityDTO } from '../../infrastructure/dtos/communities/communi
 export class CommunitiesService {
   constructor(
     @InjectRepository(Community)
-    private communityRepository: Repository<Community>
+    private communityRepository: Repository<Community>,
   ) {}
-
-  public getStatus(): string {
-    return 'Community Service is running!';
-  }
 
   public async registerCommunity(newCommunity: RegisterCommunityDTO): Promise<Community> {
     if (await this.isRegistered(newCommunity.email)) {
@@ -25,6 +21,9 @@ export class CommunitiesService {
     return await this.communityRepository.save(new Community(newCommunity));
   }
 
+  /**
+   * @deprecated
+   */
   public async loginCommunity(communityCredentials: LoginCommunityDTO): Promise<Community> {
     const { email, password } = communityCredentials;
 
@@ -51,15 +50,22 @@ export class CommunitiesService {
 
   public async existsCommunity(communityId: string) {
     const id = communityId;
-    const community =await this.communityRepository
+    const community = await this.communityRepository
       .createQueryBuilder('community')
       .where('community.id = :id', { id })
       .getOne();
-    
+
     return !!community;
   }
 
   public async getAllCommunities(): Promise<Community[]> {
     return await this.communityRepository.find();
+  }
+
+  public findCommunity(email: string): Promise<Community> {
+    return this.communityRepository
+      .createQueryBuilder('community')
+      .where('community.email = :email', { email })
+      .getOne();
   }
 }

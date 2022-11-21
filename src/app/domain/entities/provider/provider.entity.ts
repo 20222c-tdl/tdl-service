@@ -1,16 +1,10 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { Category } from '../categories/category.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '../roles/role.enum';
 
 @Entity()
 export class Provider {
@@ -50,6 +44,13 @@ export class Provider {
   @ManyToOne(() => Category, (category) => category.id)
   @JoinColumn()
   category: Category;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.PROVIDER,
+  })
+  role: Role;
 
   constructor(partial: Partial<Provider>) {
     Object.assign(this, partial);

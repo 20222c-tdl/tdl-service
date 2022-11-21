@@ -15,10 +15,6 @@ export class UsersService {
     private readonly communitiesService: CommunitiesService,
   ) {}
 
-  public getStatus(): string {
-    return 'User Service is running!';
-  }
-
   public async registerUser(newUser: RegisterUserDTO): Promise<User> {
     if (await this.isRegistered(newUser.email)) {
       throw new BadRequestException('This email is already in use!');
@@ -31,6 +27,17 @@ export class UsersService {
     return await this.userRepository.save(new User(newUser));
   }
 
+  public async findUser(email: string): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .getOne();
+  }
+
+  /**
+   * @deprecated Deprecamos este método en favor de pasar la validación al AuthModule
+   * @param userCredentials
+   */
   public async loginUser(userCredentials: LoginDTO): Promise<User> {
     const { email, password } = userCredentials;
 
@@ -55,12 +62,12 @@ export class UsersService {
     return !!user;
   }
 
-  public async existsUser(id: string) {
+  public async existsUser(id: string): Promise<boolean> {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id = :id', { id })
       .getOne();
-      
+
     return !!user;
   }
 

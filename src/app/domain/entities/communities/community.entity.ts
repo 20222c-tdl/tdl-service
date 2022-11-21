@@ -1,6 +1,7 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../roles/role.enum';
 
 @Entity()
 class Community {
@@ -16,6 +17,13 @@ class Community {
   @Column()
   @Exclude()
   public password: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.COMMUNITY,
+  })
+  role: Role;
 
   constructor(partial: Partial<Community>) {
     Object.assign(this, partial);

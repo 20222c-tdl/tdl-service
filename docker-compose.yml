@@ -2,6 +2,7 @@ version: "3.4"
 services:
   postgres_users:
     container_name: postgres_users
+    restart: unless-stopped
     image: postgres:latest
     ports:
       - "5432:5432"
@@ -11,14 +12,14 @@ services:
       POSTGRES_DB: db
 
   api_nest:
-    restart: always
     container_name: api_nest
+    restart: unless-stopped
     build:
       dockerfile: Dockerfile
       context: .
       target: development
     depends_on:
-      - postgres_users 
+      - postgres_users
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -26,6 +27,7 @@ services:
       DATABASE_URL: postgres://user:password@postgres_users:5432/db
       NODE_ENV: development
       PORT: 3001
+      JWT_SECRET: example
     entrypoint:
       - npm
       - run

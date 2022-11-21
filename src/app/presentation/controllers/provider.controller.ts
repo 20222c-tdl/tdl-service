@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ProviderService } from '../services/provider.service';
 import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 import { Provider } from '../../domain/entities/provider/provider.entity';
 import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
@@ -37,6 +37,7 @@ export class ProviderController {
   }
 
   @ApiBody({ type: LoginDTO })
+  @ApiOperation({ deprecated: true })
   @Post('/login')
   async login(@Body() providerCredentials: LoginDTO): Promise<Provider> {
     return this.providerService.login(providerCredentials);
