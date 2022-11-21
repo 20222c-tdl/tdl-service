@@ -8,10 +8,10 @@ import User from '../../domain/entities/users/user.entity';
 import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
 import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
 import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
-import { JwtAuthGuard } from '../../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
 import { Role } from '../../domain/entities/roles/role.enum';
-import { HasRoles } from '../../../auth/has-roles.decorator';
-import { RolesGuard } from '../../../auth/roles.guard';
+import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
+import { RolesGuard } from '../../infrastructure/guards/roles.guard';
 
 @ApiTags('Claims')
 @ApiBearerAuth()
