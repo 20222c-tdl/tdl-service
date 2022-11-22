@@ -67,6 +67,9 @@ export class ProviderService {
     return provider !== null;
   }
 
+  /**
+   * @deprecated
+   */
   public async login(providerCredentials: LoginDTO): Promise<Provider> {
     const { email, password } = providerCredentials;
 
@@ -80,5 +83,12 @@ export class ProviderService {
     }
 
     throw new BadRequestException('Wrong credentials!');
+  }
+
+  public findProvider(email: string): Promise<Provider> {
+    return this.providerRepository
+      .createQueryBuilder('provider')
+      .where('provider.email = :email', { email })
+      .getOne();
   }
 }

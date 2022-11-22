@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ClaimStatus } from "../../../domain/entities/claims/claim.entity.status";
+import { ApiProperty } from '@nestjs/swagger';
+import { ClaimStatus } from '../../../domain/entities/claims/claim.entity.status';
 
 
 export class UpdateClaimStatusDTO {

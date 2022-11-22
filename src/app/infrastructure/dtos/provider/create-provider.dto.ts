@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsIdentityCard,
-  IsPhoneNumber,
-  IsUUID,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsUUID, MinLength } from 'class-validator';
+
 // TODO: Add validation for the phone number and the identity card
 export class CreateProviderDto {
   @ApiProperty({ type: String, description: 'Email' })
