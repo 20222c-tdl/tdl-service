@@ -58,6 +58,15 @@ export class ProviderService {
     return provider !== null;
   }
 
+  async existsProvider(id: string) {
+    const provider = await this.providerRepository
+      .createQueryBuilder('provider')
+      .where('provider.id = :id', { id })
+      .getOne();
+
+    return provider !== null;
+  }
+
   /**
    * @deprecated
    */
