@@ -100,4 +100,8 @@ export class ProviderService {
       .where('provider.email = :email', { email })
       .getOne();
   }
+
+  public async getProvider(id: string): Promise<Provider> {
+    return this.providerRepository.findOne({ where: { id } });
+  }
 }

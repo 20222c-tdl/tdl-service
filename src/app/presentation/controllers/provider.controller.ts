@@ -4,12 +4,13 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
 } from '@nestjs/common';
 import { ProviderService } from '../services/provider.service';
 import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 import { Provider } from '../../domain/entities/provider/provider.entity';
 import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
@@ -41,5 +42,17 @@ export class ProviderController {
   @Post('/login')
   async login(@Body() providerCredentials: LoginDTO): Promise<Provider> {
     return this.providerService.login(providerCredentials);
+  }
+
+  @ApiParam({
+    name: 'providerId',
+    description: 'ID necessary for getting the provider information',
+    required: true,
+    type: String,
+  })
+  @Get('/:providerId')
+  async getProvider(
+      @Param('providerId') providerId: string): Promise<Provider> {
+    return await this.providerService.getProvider(providerId);
   }
 }
