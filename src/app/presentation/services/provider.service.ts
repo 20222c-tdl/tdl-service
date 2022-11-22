@@ -8,12 +8,14 @@ import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-me
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
+import { ReviewService } from './review.service';
 
 @Injectable()
 export class ProviderService {
   constructor(
     @InjectRepository(Provider)
     private providerRepository: Repository<Provider>,
+    private readonly reviewService: ReviewService,
   ) {}
 
   async create(createProviderDto: CreateProviderDto) {
@@ -40,11 +42,18 @@ export class ProviderService {
     }
 
     const itemCount = await queryBuilder.getCount();
-    const { entities } = await queryBuilder.getRawAndEntities();
+    const providers = await (await queryBuilder.getRawAndEntities()).entities;
+
+    const providersWithRating = []
+    for (const provider of providers) {
+      const rating = await this.reviewService.getReviewsFromProvider(provider.id)
+      providersWithRating.push({provider: provider, totalRating: rating.totalRating, reviewCount: rating.reviews})
+
+    }
 
     const pageMetaDto = new PageMetaDto(providerOptionsDto, itemCount);
 
-    return new PageDto(entities, pageMetaDto);
+    return new PageDto(providersWithRating, pageMetaDto);
   }
 
   private async isProviderRegistered(createProviderDto: CreateProviderDto) {
