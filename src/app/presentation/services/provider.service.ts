@@ -47,7 +47,7 @@ export class ProviderService {
     const providersWithRating = []
     for (const provider of providers) {
       const rating = await this.reviewService.getReviewsFromProvider(provider.id)
-      providersWithRating.push({provider: provider, totalRating: rating.totalRating, reviewCount: rating.reviews})
+      providersWithRating.push({provider: provider, totalRating: rating.totalRating, reviewCount: rating.reviews.length})
 
     }
 
