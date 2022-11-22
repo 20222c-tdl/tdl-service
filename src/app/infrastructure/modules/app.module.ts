@@ -8,6 +8,8 @@ import * as ormconfig from '../../../ormconfig';
 import { CommunitiesModule } from '../../domain/modules/community.module';
 import { ClaimsModule } from '../../domain/modules/claim.module';
 import { ProviderModule } from '../../domain/modules/provider.module';
+import { ServicesModule } from 'src/app/domain/modules/services.module';
+import { ReviewModule } from 'src/app/domain/modules/review.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { ProviderModule } from '../../domain/modules/provider.module';
     CommunitiesModule,
     ClaimsModule,
     ProviderModule,
+    ServicesModule,
+    ReviewModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       ...ormconfig,
