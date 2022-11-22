@@ -102,6 +102,10 @@ export class ProviderService {
   }
 
   public async getProvider(id: string): Promise<Provider> {
-    return this.providerRepository.findOne({ where: { id } });
+    return this.providerRepository
+      .createQueryBuilder('provider')
+      .leftJoinAndSelect('provider.category', 'category')
+      .where('provider.id = :id', { id })
+      .getOne();
   }
 }
