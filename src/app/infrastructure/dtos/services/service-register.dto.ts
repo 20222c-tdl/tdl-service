@@ -16,7 +16,7 @@ export class RegisterServiceDTO {
   price: number;
 
   @ApiProperty({ enum: ServiceMonetizationType, description: 'Service monetization type' })
-  status: ServiceMonetizationType;
+  monetizationType: ServiceMonetizationType;
 
   @ApiProperty({ type: String, description: 'Provider Id' })
   @IsUUID()

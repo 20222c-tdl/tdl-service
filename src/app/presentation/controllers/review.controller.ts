@@ -5,21 +5,29 @@ import {
     Get,
     Param,
     Post,
+    UseGuards,
     UseInterceptors,  
     ValidationPipe} from '@nestjs/common';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { RegisterReviewDTO } from '../../infrastructure/dtos/reviews/review-register.dto';
 import Review from '../../domain/entities/review/review.entity';
 import { ReviewService } from '../services/review.service';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
+import { RolesGuard } from '../../infrastructure/guards/roles.guard';
+import { Role } from '../../domain/entities/roles/role.enum';
+import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiTags('Reviews')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Controller('/reviews')
   export class ReviewController {
     constructor(private readonly reviewService: ReviewService) {}
 
-    @ApiTags('reviews')
+    
     @ApiBody({ type: RegisterReviewDTO })
     @Post()
+    @HasRoles(Role.USER)
     async registerReview(
       @Body(ValidationPipe) newReview: RegisterReviewDTO,
     ): Promise<Review> {
@@ -33,6 +41,7 @@ import { ReviewService } from '../services/review.service';
       type: String,
     })
     @Get('/provider/:providerId')
+    @HasRoles(Role.USER)
     async getServicesFromProvider(
         @Param('providerId') providerId: string): Promise<{reviews: Review[], totalRating: number}> {
       return await this.reviewService.getReviewsFromProvider(providerId);
