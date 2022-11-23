@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from '../../infrastructure/guards/roles.guard';
 import { Role } from '../../domain/entities/roles/role.enum';
 import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
+import User from '../../domain/entities/users/user.entity';
 
   @ApiTags('Reviews')
   @ApiBearerAuth()
@@ -43,7 +44,7 @@ import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
     @Get('/provider/:providerId')
     @HasRoles(Role.USER)
     async getServicesFromProvider(
-        @Param('providerId') providerId: string): Promise<{reviews: Review[], totalRating: number}> {
+        @Param('providerId') providerId: string): Promise<{reviews: {review: Review, user: User}[], totalRating: number}> {
       return await this.reviewService.getReviewsFromProvider(providerId);
     }
   
