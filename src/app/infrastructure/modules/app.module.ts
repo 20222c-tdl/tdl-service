@@ -9,6 +9,7 @@ import { ProviderModule } from '../../domain/modules/provider.module';
 import { ServicesModule } from 'src/app/domain/modules/services.module';
 import { ReviewModule } from 'src/app/domain/modules/review.module';
 import { AuthModule } from './auth.module';
+import { HiredServicesModule } from 'src/app/domain/modules/hired-services.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { AuthModule } from './auth.module';
     ProviderModule,
     ServicesModule,
     ReviewModule,
+    HiredServicesModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       ...ormconfig,
