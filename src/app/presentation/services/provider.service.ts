@@ -100,4 +100,12 @@ export class ProviderService {
       .where('provider.email = :email', { email })
       .getOne();
   }
+
+  public async getProvider(id: string): Promise<Provider> {
+    return this.providerRepository
+      .createQueryBuilder('provider')
+      .leftJoinAndSelect('provider.category', 'category')
+      .where('provider.id = :id', { id })
+      .getOne();
+  }
 }
