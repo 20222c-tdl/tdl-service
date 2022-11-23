@@ -28,4 +28,8 @@ export class ServicesService {
     return this.servicesRepository.find({ where: { providerId } });
   }
 
+  existsService(id: string) {
+    return !!(this.servicesRepository.find({ where: { id } }))
+  }
+
 }
