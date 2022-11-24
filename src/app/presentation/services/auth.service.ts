@@ -61,7 +61,7 @@ export class AuthService {
     };
 
     return {
-      access_token: this.jwtService.sign(payload),
+      bearer: this.jwtService.sign(payload),
     };
   }
 }
