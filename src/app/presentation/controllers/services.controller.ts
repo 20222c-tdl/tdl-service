@@ -24,7 +24,7 @@ import { ServicesService } from '../services/services.service';
 
     @ApiBody({ type: RegisterServiceDTO })
     @Post()
-    @HasRoles(Role.USER)
+    @HasRoles(Role.PROVIDER)
     async registerService(
       @Body(ValidationPipe) newService: RegisterServiceDTO,
     ): Promise<Service> {
@@ -37,8 +37,7 @@ import { ServicesService } from '../services/services.service';
       required: true,
       type: String,
     })
-    @HasRoles(Role.PROVIDER)
-    @HasRoles(Role.USER)
+    @HasRoles(Role.USER, Role.PROVIDER)
     @Get('/provider/:providerId')
     async getServicesFromProvider(
         @Param('providerId') providerId: string): Promise<Service[]> {
