@@ -37,6 +37,7 @@ import { ServicesService } from '../services/services.service';
       required: true,
       type: String,
     })
+    @HasRoles(Role.PROVIDER)
     @HasRoles(Role.USER)
     @Get('/provider/:providerId')
     async getServicesFromProvider(
