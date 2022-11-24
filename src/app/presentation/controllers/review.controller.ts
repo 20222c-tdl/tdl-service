@@ -19,8 +19,8 @@ import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
 import User from '../../domain/entities/users/user.entity';
 
   @ApiTags('Reviews')
-  //@ApiBearerAuth()
-  //@UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Controller('/reviews')
   export class ReviewController {
     constructor(private readonly reviewService: ReviewService) {}
@@ -55,7 +55,7 @@ import User from '../../domain/entities/users/user.entity';
       type: String,
     })
     @Get('/user/:userId')
-    //@HasRoles(Role.USER)
+    @HasRoles(Role.USER)
     async getReviewsFromUser(
         @Param('userId') userId: string): Promise<Review[]> {
       return await this.reviewService.getReviewsFromUser(userId);
