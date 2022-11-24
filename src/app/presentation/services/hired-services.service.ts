@@ -64,9 +64,12 @@ export class HiredServicesService {
     console.log("🚀 ~ userHiredServices", await userHiredProvider)
 
     for (const hiredProvider of userHiredProvider) {
-      const hiredServices = await this.hiredServicesRepository.find({ where: { hiredProviderId: hiredProvider.id } });
+      const hiredServicesIds = await this.hiredServicesRepository.find({ where: { hiredProviderId: hiredProvider.id } });
+      const hiredServices = [];
+      for (const hiredServiceIds of hiredServicesIds)
+        hiredServices.push(await this.servicesService.getServiceById(hiredServiceIds.serviceId));
       const provider = await this.providerService.getProvider(hiredProvider.providerId);
-      userHiredServices.push({hiredServicesId: hiredProvider.id, hiredServices: hiredServices, provider: provider});
+      userHiredServices.push({hiredServices: hiredProvider, services: hiredServices, provider: provider});
     }
     
     

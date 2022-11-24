@@ -17,7 +17,7 @@ import { HiredServicesService } from "../services/hired-services.service";
 
     @ApiBody({ type: RegisterHiredServicesDTO })
     @Post()
-    //@HasRoles(Role.USER)
+    @HasRoles(Role.USER)
     async registerHiredService(
       @Body(ValidationPipe) newHiredServices: RegisterHiredServicesDTO,
     ): Promise<IHiredServices> {
@@ -30,7 +30,7 @@ import { HiredServicesService } from "../services/hired-services.service";
       required: true,
       type: String,
     })
-    //@HasRoles(Role.USER)
+    @HasRoles(Role.USER)
     @Get('/user/:userId')
     async getHiredServicesFromUser(
         @Param('userId') userId: string) {

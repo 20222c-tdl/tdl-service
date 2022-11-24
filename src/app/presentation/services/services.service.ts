@@ -32,4 +32,8 @@ export class ServicesService {
     return !!(this.servicesRepository.find({ where: { id } }))
   }
 
+  getServiceById(id: string): any {
+    return this.servicesRepository.findOne({ where: { id } });
+  }
+
 }
