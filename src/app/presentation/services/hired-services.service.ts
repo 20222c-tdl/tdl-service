@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import Service from 'src/app/domain/entities/service/service.entity';
-import { RegisterServiceDTO } from 'src/app/infrastructure/dtos/services/service-register.dto';
 import { ProviderService } from './provider.service';
 import HiredProvider from 'src/app/domain/entities/hired-services/hired-provider.entity';
 import HiredService from 'src/app/domain/entities/hired-services/hired-service.entity';
@@ -61,18 +59,39 @@ export class HiredServicesService {
       .createQueryBuilder('hiredProvider')
       .where('hiredProvider.userId = :userId', { userId })
       .getMany();
-    console.log("🚀 ~ userHiredServices", await userHiredProvider)
 
     for (const hiredProvider of userHiredProvider) {
       const hiredServicesIds = await this.hiredServicesRepository.find({ where: { hiredProviderId: hiredProvider.id } });
       const hiredServices = [];
       for (const hiredServiceIds of hiredServicesIds)
-        hiredServices.push(await this.servicesService.getServiceById(hiredServiceIds.serviceId));
+        hiredServices.push({...(await this.servicesService.getServiceById(hiredServiceIds.serviceId)), hours: hiredServiceIds.hours});
       const provider = await this.providerService.getProvider(hiredProvider.providerId);
-      userHiredServices.push({hiredServices: hiredProvider, services: hiredServices, provider: provider});
+      userHiredServices.push({hiredServices: hiredProvider, services:{  }, provider: provider});
     }
     
     
     return userHiredServices;
+  }
+  
+  public async updatePaidStatus(id: string, isPaid: boolean) {
+    return await this.hiredProvidersRepository.createQueryBuilder().update(HiredProvider).set({ isPaid }).where('id = :id', { id }).execute();
+  }
+
+  public async deleteHiredServices(hiredServiceId: string) {
+    if (!(await this.hiredProvidersRepository.findOne({ where: {id: hiredServiceId} })))
+      throw new BadRequestException('The hired service does not exist!');
+    this.hiredServicesRepository
+      .delete({ hiredProviderId: hiredServiceId })
+      .then(() => this.hiredProvidersRepository.delete({ id: hiredServiceId }));
+  }
+
+  async existsHiredProvider(HiredServicesId: string, userId: string, providerId: string) {
+    const hiredProvider = await this.hiredProvidersRepository.findOne({ where: { id: HiredServicesId } });
+
+    if (!hiredProvider) 
+      return false;
+    else
+      return hiredProvider.userId === userId && hiredProvider.providerId === providerId;
+
   }
 }

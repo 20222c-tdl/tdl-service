@@ -10,6 +10,10 @@ export class RegisterReviewDTO {
   @IsUUID()
   providerId: string;
 
+  @ApiProperty({ type: String, description: 'Provider Id' })
+  @IsUUID()
+  HiredServicesId: string;
+
   @ApiProperty({ type: Number, description: 'Rating' })
   @IsNumber()
   @Min(0)

@@ -10,7 +10,6 @@ import Review from '../entities/review/review.entity';
 import { ReviewController } from 'src/app/presentation/controllers/review.controller';
 import { ReviewService } from 'src/app/presentation/services/review.service';
 import { UsersModule } from './user.module';
-import { ReviewModule } from './review.module';
 
 @Module({
   imports: [

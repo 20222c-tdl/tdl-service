@@ -12,6 +12,9 @@ class Review {
   public providerId: string;
 
   @Column()
+  public HiredServicesId: string;
+
+  @Column()
   public rating: number;
 
   @Column()
