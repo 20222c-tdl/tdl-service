@@ -37,4 +37,8 @@ export class ReviewService {
     return {reviews: reviewsWithUser, totalRating};
   }
 
+  async getReviewsFromUser(userId: string): Promise<Review[]> {
+    return this.reviewRepository.find({ where: { userId } });
+  }
+
 }
