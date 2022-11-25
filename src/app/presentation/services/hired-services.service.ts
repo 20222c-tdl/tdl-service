@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import HiredProvider from '../../domain/entities/hired-services/hired-provider.entity';
+import HiredService from '../../domain/entities/hired-services/hired-service.entity';
+import { IHiredServices } from '../../domain/interfaces/hired-services.interface';
+import { RegisterHiredServicesDTO } from '../../infrastructure/dtos/hired-services/hired-services-register.dto';
 import { ProviderService } from './provider.service';
-import HiredProvider from 'src/app/domain/entities/hired-services/hired-provider.entity';
-import HiredService from 'src/app/domain/entities/hired-services/hired-service.entity';
-import { UsersService } from './users.service';
 import { ServicesService } from './services.service';
-import { RegisterHiredServicesDTO } from 'src/app/infrastructure/dtos/hired-services/hired-services-register.dto';
-import { IHiredServices } from 'src/app/domain/interfaces/hired-services.interface';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class HiredServicesService {

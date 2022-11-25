@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsUUID, ValidateNested } from 'class-validator';
+
 import { RegisterHiredServiceDTO } from './hired-service-register.dto';
 
 export class RegisterHiredServicesDTO {

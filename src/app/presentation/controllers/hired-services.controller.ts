@@ -1,12 +1,25 @@
-import { UseGuards, Controller, Post, Body, ValidationPipe, Get, Param, Patch, ParseBoolPipe, Query, Delete } from "@nestjs/common";
-import { ApiTags, ApiBearerAuth, ApiBody, ApiParam } from "@nestjs/swagger";
-import { Role } from "../../domain/entities/roles/role.enum";
-import { IHiredServices } from "../../domain/interfaces/hired-services.interface";
-import { JwtAuthGuard } from "../../infrastructure/auth/jwt/jwt-auth.guard";
-import { HasRoles } from "../../infrastructure/decorators/has-roles.decorator";
-import { RegisterHiredServicesDTO } from "../../infrastructure/dtos/hired-services/hired-services-register.dto";
-import { RolesGuard } from "../../infrastructure/guards/roles.guard";
-import { HiredServicesService } from "../services/hired-services.service";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseBoolPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+
+import { Role } from '../../domain/entities/roles/role.enum';
+import { IHiredServices } from '../../domain/interfaces/hired-services.interface';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
+import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
+import { RegisterHiredServicesDTO } from '../../infrastructure/dtos/hired-services/hired-services-register.dto';
+import { RolesGuard } from '../../infrastructure/guards/roles.guard';
+import { HiredServicesService } from '../services/hired-services.service';
 
   @ApiTags('Hired Services')
   @ApiBearerAuth()

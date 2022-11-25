@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import Community from '../../domain/entities/communities/community.entity';
-import { CommunitiesService } from '../services/community.service';
-import { RegisterCommunityDTO } from '../../infrastructure/dtos/communities/community-register.dto';
 import { LoginCommunityDTO } from '../../infrastructure/dtos/communities/community-login.dto';
+import { RegisterCommunityDTO } from '../../infrastructure/dtos/communities/community-register.dto';
+import { CommunitiesService } from '../services/community.service';
 
 @ApiTags('Communities')
 @Controller('/communities')

@@ -1,22 +1,14 @@
-import {
-    Body,
-    ClassSerializerInterceptor,
-    Controller,
-    Get,
-    Param,
-    Post,
-    UseGuards,
-    UseInterceptors,  
-    ValidationPipe} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
-import { RegisterReviewDTO } from '../../infrastructure/dtos/reviews/review-register.dto';
+
 import Review from '../../domain/entities/review/review.entity';
-import { ReviewService } from '../services/review.service';
-import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
-import { RolesGuard } from '../../infrastructure/guards/roles.guard';
 import { Role } from '../../domain/entities/roles/role.enum';
-import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
 import User from '../../domain/entities/users/user.entity';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
+import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
+import { RegisterReviewDTO } from '../../infrastructure/dtos/reviews/review-register.dto';
+import { RolesGuard } from '../../infrastructure/guards/roles.guard';
+import { ReviewService } from '../services/review.service';
 
   @ApiTags('Reviews')
   @ApiBearerAuth()

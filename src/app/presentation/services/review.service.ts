@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import Review from '../../domain/entities/review/review.entity';
-import { UsersService } from './users.service';
+import User from '../../domain/entities/users/user.entity';
 import { RegisterReviewDTO } from '../../infrastructure/dtos/reviews/review-register.dto';
-import User from 'src/app/domain/entities/users/user.entity';
-import { HiredServicesService } from './hired-services.service';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class ReviewService {

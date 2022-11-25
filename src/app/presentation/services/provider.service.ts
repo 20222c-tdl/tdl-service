@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Provider } from '../../domain/entities/provider/provider.entity';
-import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
-import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-meta.dto';
-import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+
+import { Provider } from '../../domain/entities/provider/provider.entity';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
+import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-meta.dto';
+import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
+import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
+import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
 import { ReviewService } from './review.service';
 
 @Injectable()

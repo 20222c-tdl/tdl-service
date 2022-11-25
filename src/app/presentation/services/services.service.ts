@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import Service from 'src/app/domain/entities/service/service.entity';
 import { RegisterServiceDTO } from 'src/app/infrastructure/dtos/services/service-register.dto';
+import { Repository } from 'typeorm';
+
+import Service from '../../domain/entities/service/service.entity';
 import { ProviderService } from './provider.service';
 
 @Injectable()
