@@ -67,7 +67,7 @@ export class HiredServicesService {
       for (const hiredServiceIds of hiredServicesIds)
         hiredServices.push({...(await this.servicesService.getServiceById(hiredServiceIds.serviceId)), hours: hiredServiceIds.hours});
       const provider = await this.providerService.getProvider(hiredProvider.providerId);
-      userHiredServices.push({hiredServices: hiredProvider, services:{  }, provider: provider});
+      userHiredServices.push({hiredServices: hiredProvider, services: hiredServices, provider: provider});
     }
     
     
