@@ -34,7 +34,7 @@ import { ReviewService } from '../services/review.service';
       type: String,
     })
     @Get('/provider/:providerId')
-    @HasRoles(Role.USER)
+    @HasRoles(Role.USER, Role.PROVIDER)
     async getReviewsFromProvider(
         @Param('providerId') providerId: string): Promise<{reviews: {review: Review, user: User}[], totalRating: number}> {
       return await this.reviewService.getReviewsFromProvider(providerId);
