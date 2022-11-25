@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from '../../infrastructure/dtos/categories/create-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from '../../domain/entities/categories/category.entity';
 import { Repository } from 'typeorm';
+
+import { Category } from '../../domain/entities/categories/category.entity';
+import { CreateCategoryDto } from '../../infrastructure/dtos/categories/create-category.dto';
 import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-meta.dto';
-import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
 import { PageOptionsDto } from '../../infrastructure/dtos/common/pagination/page-options.dto';
+import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
 
 @Injectable()
 export class CategoryService {

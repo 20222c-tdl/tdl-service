@@ -1,17 +1,19 @@
 import { Body, Controller, Get, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
-import { ClaimsService } from '../services/claims.service';
-import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-register.dto';
+
+import ClaimComment from '../../domain/entities/claims-comment/claim-comment.entity';
 import Claim from '../../domain/entities/claims/claim.entity';
-import { ClaimsByCommunityDTO } from '../../infrastructure/dtos/claims/claims-by-community.dto';
-import User from '../../domain/entities/users/user.entity';
 import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
-import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
-import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
-import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
 import { Role } from '../../domain/entities/roles/role.enum';
+import User from '../../domain/entities/users/user.entity';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt/jwt-auth.guard';
 import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
+import { RegisterClaimDTO } from '../../infrastructure/dtos/claims/claim-register.dto';
+import { UpdateClaimDTO } from '../../infrastructure/dtos/claims/claim-update.dto';
+import { ClaimsByCommunityDTO } from '../../infrastructure/dtos/claims/claims-by-community.dto';
+import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user.dto';
 import { RolesGuard } from '../../infrastructure/guards/roles.guard';
+import { ClaimsService } from '../services/claims.service';
 
 @ApiTags('Claims')
 @ApiBearerAuth()
@@ -37,7 +39,7 @@ export class ClaimsController {
   @Get('/community/:communityId')
   @HasRoles(Role.COMMUNITY)
   async getClaimsByCommunity(
-    @Param('communityId') communityId: string): Promise<{ claim: Claim, user: User }[]> {
+    @Param('communityId') communityId: string): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
     return await this.claimService.getClaimsByCommunity(new ClaimsByCommunityDTO(communityId));
   }
 
@@ -50,7 +52,7 @@ export class ClaimsController {
   @Get('/user/:userId')
   @HasRoles(Role.USER)
   async getClaimsByUser(
-    @Param('userId') userId: string): Promise<Claim[]> {
+    @Param('userId') userId: string): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
     return await this.claimService.getClaimsByUser(new ClaimsByUserDTO(userId));
   }
 

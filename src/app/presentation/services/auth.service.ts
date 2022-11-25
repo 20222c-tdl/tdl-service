@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from './users.service';
-import User from '../../domain/entities/users/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { ProviderService } from './provider.service';
+
+import User from '../../domain/entities/users/user.entity';
 import { CommunitiesService } from './community.service';
+import { ProviderService } from './provider.service';
+import { UsersService } from './users.service';
 
 
 @Injectable()

@@ -1,21 +1,13 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Query,
-} from '@nestjs/common';
-import { ProviderService } from '../services/provider.service';
-import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
+
 import { Provider } from '../../domain/entities/provider/provider.entity';
-import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
 import { ApiPaginatedResponse } from '../../infrastructure/decorators/api-paginated-response.decorator';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
+import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
+import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
+import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
+import { ProviderService } from '../services/provider.service';
 
 @ApiTags('Providers')
 @Controller('providers')
