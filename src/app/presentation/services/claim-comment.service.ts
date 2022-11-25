@@ -14,7 +14,7 @@ export class ClaimCommentService {
   constructor(
     @InjectRepository(ClaimComment)
     private claimCommentRepository: Repository<ClaimComment>,
-    @InjectRepository(ClaimComment)
+    @InjectRepository(Claim)
     private claimRepository: Repository<Claim>,
   ) {}
 

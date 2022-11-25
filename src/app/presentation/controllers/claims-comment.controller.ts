@@ -12,7 +12,7 @@ import { ClaimCommentService } from '../services/claim-comment.service';
 @ApiTags('Comments')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('/Comments')
+@Controller('/claim-comments')
 export class ClaimCommentController {
   constructor(private readonly claimComentService: ClaimCommentService) {}
 
