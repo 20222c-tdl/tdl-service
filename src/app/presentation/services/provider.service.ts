@@ -48,7 +48,6 @@ export class ProviderService {
         new Brackets((qb) => {
           queryBuilder.where('(provider.firstName like :word OR provider.lastName like :word)', { word: `%${searchedWords.pop()}%` })
           for (const word of searchedWords) {
-            console.log("🚀 ~ searchedWords", searchedWords)
             queryBuilder.orWhere(
               '(provider.firstName like :word OR provider.lastName like :word)', { word: `%${word}%` }
             );
@@ -60,7 +59,6 @@ export class ProviderService {
     }
 
     const itemCount = await queryBuilder.getCount();
-    console.log("🚀 ~ itemCount", itemCount)
     const providers = await (await queryBuilder.getRawAndEntities()).entities;
 
     const providersWithRating = []
