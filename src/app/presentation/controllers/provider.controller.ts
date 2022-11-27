@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Provider } from '../../domain/entities/provider/provider.entity';
@@ -24,7 +24,7 @@ export class ProviderController {
   @HttpCode(HttpStatus.OK)
   @ApiPaginatedResponse(Provider)
   find(
-    @Query() providerOptionsDto: ProviderOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) providerOptionsDto: ProviderOptionsDto,
   ): Promise<PageDto<Provider>> {
     return this.providerService.getProviders(providerOptionsDto);
   }
@@ -47,4 +47,5 @@ export class ProviderController {
       @Param('providerId') providerId: string): Promise<Provider> {
     return await this.providerService.getProvider(providerId);
   }
+
 }

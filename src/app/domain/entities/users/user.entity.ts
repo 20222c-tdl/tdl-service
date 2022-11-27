@@ -37,6 +37,9 @@ class User {
   })
   role: Role;
 
+  @Column()
+  public photo: string;
+
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
   }

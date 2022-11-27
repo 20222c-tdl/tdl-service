@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsUUID, MinLength } from 'class-validator';
+import { IsBase64, IsEmail, IsUUID, MinLength } from 'class-validator';
 
 export class RegisterUserDTO {
   @ApiProperty({ type: String, description: 'First Name' })
@@ -27,4 +27,8 @@ export class RegisterUserDTO {
   @ApiProperty({ type: String, description: 'Community Id' })
   @IsUUID()
   communityId: string;
+
+  @ApiProperty({ type: String, description: 'Profile photo' })
+  @IsBase64()
+  photo: string;
 }

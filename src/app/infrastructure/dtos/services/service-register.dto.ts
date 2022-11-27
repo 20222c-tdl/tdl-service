@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsUUID, MinLength } from 'class-validator';
-import { ServiceMonetizationType } from 'src/app/domain/entities/service/service.entity.monetization.type';
+
+import { ServiceMonetizationType } from '../../../domain/entities/service/service.entity.monetization.type';
 
 export class RegisterServiceDTO {
   @ApiProperty({ type: String, description: 'Title' })

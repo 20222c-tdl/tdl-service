@@ -56,6 +56,10 @@ export class Provider {
     Object.assign(this, partial);
   }
 
+  @Column()
+  @ApiProperty()
+  public photo: string;
+
   @BeforeInsert()
   private async hashPassword() {
     const saltOrRounds = 10;

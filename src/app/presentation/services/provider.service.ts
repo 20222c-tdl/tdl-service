@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 
 import { Provider } from '../../domain/entities/provider/provider.entity';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
@@ -42,7 +42,25 @@ export class ProviderService {
       });
     }
 
+    if (providerOptionsDto.searchedWords) {
+      const searchedWords = providerOptionsDto.searchedWords.split(' ');
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          queryBuilder.where('(provider.firstName like :word OR provider.lastName like :word)', { word: `%${searchedWords.pop()}%` })
+          for (const word of searchedWords) {
+            console.log("🚀 ~ searchedWords", searchedWords)
+            queryBuilder.orWhere(
+              '(provider.firstName like :word OR provider.lastName like :word)', { word: `%${word}%` }
+            );
+          }
+          
+        })
+      )
+      
+    }
+
     const itemCount = await queryBuilder.getCount();
+    console.log("🚀 ~ itemCount", itemCount)
     const providers = await (await queryBuilder.getRawAndEntities()).entities;
 
     const providersWithRating = []

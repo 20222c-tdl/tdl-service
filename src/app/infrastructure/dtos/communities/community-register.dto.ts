@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, MinLength } from 'class-validator';
+import { IsBase64, IsEmail, MinLength } from 'class-validator';
 
 export class RegisterCommunityDTO {
   @ApiProperty({ type: String, description: 'Name' })
@@ -13,5 +13,10 @@ export class RegisterCommunityDTO {
   @ApiProperty({ type: String, description: 'Password' })
   @MinLength(6)
   password: string;
+
+  @ApiProperty({ type: String, description: 'Profile photo' })
+  @IsBase64()
+  photo: string;
+
 
 }
