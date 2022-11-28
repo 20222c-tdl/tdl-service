@@ -15,7 +15,7 @@ export class AuthService {
     private providersService: ProviderService,
     private communitiesService: CommunitiesService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   public async login(user: any) {
     return this.getToken(user)
@@ -55,8 +55,9 @@ export class AuthService {
   }
 
   private getToken(user: any) {
+    const { photo, ...newUser } = user;
     const payload = {
-      user,
+      user: newUser,
       sub: user.id,
       role: user.role,
     };
