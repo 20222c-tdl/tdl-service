@@ -28,6 +28,8 @@ services:
       NODE_ENV: development
       PORT: 3001
       JWT_SECRET: example
+      TELEGRAM_BOT_TOKEN: 5953939393:AAHKG33J8OqKmKcxScj_gsPIH0egq629X-U
+      DEBUG: telegraf:*
     entrypoint:
       - npm
       - run

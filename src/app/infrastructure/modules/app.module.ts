@@ -11,6 +11,7 @@ import { CommunitiesModule } from '../../domain/modules/community.module';
 import { ProviderModule } from '../../domain/modules/provider.module';
 import { UsersModule } from '../../domain/modules/user.module';
 import { AuthModule } from './auth.module';
+import { BotService } from '../../presentation/bot/bot.service';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { AuthModule } from './auth.module';
       autoLoadEntities: true,
     }),
   ],
-  providers: [],
+  controllers: [],
+  providers: [BotService],
 })
 export class AppModule {}
