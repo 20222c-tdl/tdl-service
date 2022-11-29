@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ClaimStatus } from './claim.entity.status';
 
 @Entity()
@@ -23,6 +23,12 @@ class Claim {
 
   @Column()
   public status: ClaimStatus;
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
 
   constructor(partial: Partial<Claim>) {
     Object.assign(this, partial);

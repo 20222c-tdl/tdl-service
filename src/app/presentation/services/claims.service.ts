@@ -49,6 +49,7 @@ export class ClaimsService {
 
     const claims = await this.claimRepository
       .createQueryBuilder('claim')
+      .orderBy('claim.createdAt', 'ASC')
       .where('claim.communityId = :communityId', { communityId })
       .getMany();
 
@@ -92,7 +93,10 @@ export class ClaimsService {
     const claimsWithComments = [];
 
     for (const claim of claims) {
-      claimsWithComments.push({...claim, claimComments: await this.claimCommentService.getClaimComments(claim.id)});
+      claimsWithComments.push({
+        ...claim,
+        claimComments: await this.claimCommentService.getClaimComments(claim.id)
+      });
     }
 
     return await claimsWithComments;
