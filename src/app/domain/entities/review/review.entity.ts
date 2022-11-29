@@ -12,13 +12,13 @@ class Review {
   public providerId: string;
 
   @Column()
-  public HiredServicesId: string;
+  public hiredServicesId: string;
 
   @Column()
   public rating: number;
 
   @Column()
-  public description: string;
+  public comment: string;
 
   constructor(partial: Partial<Review>) {
     Object.assign(this, partial);

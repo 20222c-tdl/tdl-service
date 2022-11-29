@@ -86,8 +86,8 @@ export class HiredServicesService {
       .then(() => this.hiredProvidersRepository.delete({ id: hiredServiceId }));
   }
 
-  async existsHiredProvider(HiredServicesId: string, userId: string, providerId: string) {
-    const hiredProvider = await this.hiredProvidersRepository.findOne({ where: { id: HiredServicesId } });
+  async existsHiredProvider(hiredServicesId: string, userId: string, providerId: string) {
+    const hiredProvider = await this.hiredProvidersRepository.findOne({ where: { id: hiredServicesId } });
 
     if (!hiredProvider) 
       return false;
