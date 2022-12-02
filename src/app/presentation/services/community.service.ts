@@ -69,4 +69,8 @@ export class CommunitiesService {
       .where('community.email = :email', { email })
       .getOne();
   }
+
+  public async getCommunity(id): Promise<Community> {
+    return await this.communityRepository.findOne({ where: { id } });
+  }
 }
