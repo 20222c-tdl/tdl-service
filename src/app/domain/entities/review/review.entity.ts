@@ -14,7 +14,7 @@ class Review {
   @Column()
   public hiredServicesId: string;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 5, scale: 2 })
   public rating: number;
 
   @Column()

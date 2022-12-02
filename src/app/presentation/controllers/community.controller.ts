@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import Community from '../../domain/entities/communities/community.entity';
@@ -16,6 +16,11 @@ export class CommunityController {
     return this.communitiesService.getAllCommunities();
   }
 
+  @Get('/community/profile/:id')
+  async getCommunityPorfile(@Param('id') id: string): Promise<Community> {
+    return this.communitiesService.getCommunity(id);
+  }
+
   @ApiBody({ type: RegisterCommunityDTO })
   @Post()
   async registerCommunity(@Body(ValidationPipe) newCommunity: RegisterCommunityDTO): Promise<Community> {
@@ -29,3 +34,4 @@ export class CommunityController {
     return this.communitiesService.loginCommunity(communityCredentials);
   }
 }
+
