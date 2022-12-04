@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RegisterServiceDTO } from 'src/app/infrastructure/dtos/services/service-register.dto';
 import { Repository } from 'typeorm';
 
 import Service from '../../domain/entities/service/service.entity';
+import { RegisterServiceDTO } from '../../infrastructure/dtos/services/service-register.dto';
+import { UpdateServiceDTO } from '../../infrastructure/dtos/services/service-update.dto';
 import { ProviderService } from './provider.service';
 
 @Injectable()
@@ -29,12 +30,28 @@ export class ServicesService {
     return this.servicesRepository.find({ where: { providerId } });
   }
 
-  existsService(id: string) {
+  async existsService(id: string) {
     return !!(this.servicesRepository.find({ where: { id } }))
   }
 
-  getServiceById(id: string): any {
+  async getServiceById(id: string) {
     return this.servicesRepository.findOne({ where: { id } });
+  }
+
+  async updateService(id: string, updatedService: UpdateServiceDTO): Promise<Service> {
+    if (!(await this.existsService(id))) {
+      throw new BadRequestException('The service does not exist!');
+    }
+    this.servicesRepository
+      .createQueryBuilder()
+      .update(Service)
+      .set(updatedService)
+      .where('id = :id', { id })
+      .execute();
+
+    return this.servicesRepository.findOne({
+      where: { id },
+    });
   }
 
 }

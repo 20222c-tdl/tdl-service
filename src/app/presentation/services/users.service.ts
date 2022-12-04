@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserPasswordDTO } from 'src/app/infrastructure/dtos/users/user-update-password.dto';
+import { UpdateUserDTO } from 'src/app/infrastructure/dtos/users/user-update.dto';
 import { Repository } from 'typeorm';
 
 import User from '../../domain/entities/users/user.entity';
@@ -74,5 +76,45 @@ export class UsersService {
 
   public async getUserById(id: string): Promise<User> {
     return await this.userRepository.findOne({ where: { id } });
+  }
+
+  public async updateUserPassword(id: string, updatedUserPassword: UpdateUserPasswordDTO): Promise<User> {
+    if (!(await this.existsUser(id))) {
+      throw new BadRequestException('The user does not exist!');
+    }
+
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!bcrypt.compareSync(updatedUserPassword.oldPassword, user.password)) {
+      throw new BadRequestException('The password is not correct!');
+    }
+
+    const passwordUpdate = { password: bcrypt.hashSync(updatedUserPassword.newPassword, 10)};
+    this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set(passwordUpdate)
+      .where('id = :id', { id })
+      .execute();
+
+    return this.userRepository.findOne({
+        where: { id },
+    });
+  }
+
+  public async updateUser(id: string, updatedUser: UpdateUserDTO): Promise<User> {
+    if (!(await this.existsUser(id))) {
+      throw new BadRequestException('The user does not exist!');
+    }
+    this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set(updatedUser)
+      .where('id = :id', { id })
+      .execute();
+
+    return this.userRepository.findOne({
+      where: { id },
+    });
   }
 }

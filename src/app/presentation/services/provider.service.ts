@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { UpdateProviderDTO } from 'src/app/infrastructure/dtos/provider/provider-update.dto';
 import { Brackets, Repository } from 'typeorm';
 
 import { Provider } from '../../domain/entities/provider/provider.entity';
@@ -124,5 +125,21 @@ export class ProviderService {
       .leftJoinAndSelect('provider.category', 'category')
       .where('provider.id = :id', { id })
       .getOne();
+  }
+
+  public async updateProvider(id: string, updatedProvider: UpdateProviderDTO): Promise<Provider> {
+    if (!(await this.existsProvider(id))) {
+      throw new BadRequestException('The provider does not exist!');
+    }
+    this.providerRepository
+      .createQueryBuilder()
+      .update(Provider)
+      .set(updatedProvider)
+      .where('id = :id', { id })
+      .execute();
+
+    return this.providerRepository.findOne({
+      where: { id },
+    });
   }
 }
