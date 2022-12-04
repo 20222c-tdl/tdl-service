@@ -131,7 +131,7 @@ export class ProviderService {
     if (!(await this.existsProvider(id))) {
       throw new BadRequestException('The provider does not exist!');
     }
-    this.providerRepository
+    await this.providerRepository
       .createQueryBuilder()
       .update(Provider)
       .set(updatedProvider)
