@@ -7,12 +7,12 @@ import { ClaimsModule } from '../../domain/modules/claim.module';
 import { CommunitiesModule } from '../../domain/modules/community.module';
 import { CreditCardModule } from '../../domain/modules/credit-card.module';
 import { HiredServicesModule } from '../../domain/modules/hired-services.module';
+import { PlaceReservationModule } from '../../domain/modules/place-reservation.module';
 import { ProviderModule } from '../../domain/modules/provider.module';
 import { ReviewModule } from '../../domain/modules/review.module';
 import { ServicesModule } from '../../domain/modules/services.module';
 import { UsersModule } from '../../domain/modules/user.module';
 import { AuthModule } from './auth.module';
-
 
 @Module({
   imports: [
@@ -25,6 +25,7 @@ import { AuthModule } from './auth.module';
     ReviewModule,
     HiredServicesModule,
     CreditCardModule,
+    PlaceReservationModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       ...ormconfig,
