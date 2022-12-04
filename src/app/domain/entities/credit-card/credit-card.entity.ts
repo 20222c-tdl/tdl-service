@@ -15,7 +15,7 @@ class CreditCard {
   public name: string;
 
   @Column()
-  public expirationDate: Date;
+  public expirationDate: string;
 
   @Column()
   public cvc: string;
