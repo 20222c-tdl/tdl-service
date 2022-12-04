@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdatePlaceDTO } from 'src/app/infrastructure/dtos/place/place-update.dto';
 import { Repository } from 'typeorm';
 
 import Place from '../../domain/entities/place/place.entity';
@@ -31,7 +32,33 @@ export class PlaceService {
   }
 
   public async existsPlace(placeId: string): Promise<boolean> {
-    return !! (await this.placeRepository.find({ where: { id: placeId } }));
+    return !!(await this.placeRepository.find({ where: { id: placeId } }));
   }
 
+  public async updatePlace(
+    id: string,
+    updatedPlace: UpdatePlaceDTO,
+  ): Promise<Place> {
+    if (!(await this.existsPlace(id)))
+      throw new Error('The place does not exist!');
+
+    await this.placeRepository
+      .createQueryBuilder()
+      .update(Place)
+      .set(updatedPlace)
+      .where('id = :id', { id })
+      .execute();
+
+    return this.placeRepository.findOne({ where: { id } });
+  }
+
+  public async getPlaceById(id: string): Promise<Place> {
+    const place = await this.placeRepository.findOne({ where: { id } });
+
+    if (!place) {
+      throw new Error('The place does not exist!');
+    }
+
+    return place;
+  }
 }

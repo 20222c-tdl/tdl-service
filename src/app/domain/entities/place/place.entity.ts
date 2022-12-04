@@ -14,6 +14,9 @@ class Place {
   @Column()
   public description: string;
 
+  @Column()
+  public photo: string;
+
   constructor(partial: Partial<Place>) {
     Object.assign(this, partial);
   }
