@@ -1,5 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Role } from 'src/app/domain/entities/roles/role.enum';
+import { HasRoles } from 'src/app/infrastructure/decorators/has-roles.decorator';
+import { UpdateProviderDTO } from 'src/app/infrastructure/dtos/provider/provider-update.dto';
 
 import { Provider } from '../../domain/entities/provider/provider.entity';
 import { ApiPaginatedResponse } from '../../infrastructure/decorators/api-paginated-response.decorator';
@@ -46,6 +49,22 @@ export class ProviderController {
   async getProvider(
       @Param('providerId') providerId: string): Promise<Provider> {
     return await this.providerService.getProvider(providerId);
+  }
+
+  @HasRoles(Role.PROVIDER)
+  @ApiBody({ type: UpdateProviderDTO })
+  @ApiParam({
+    name: 'id',
+    description: 'ID necessary for updating provider',
+    required: true,
+    type: String,
+  })
+  @Patch(':id')
+  async updateProvider(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updatedProvider: UpdateProviderDTO,
+  ): Promise<Provider> {
+    return this.providerService.updateProvider(id, updatedProvider);
   }
 
 }

@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HiredServicesModule } from 'src/app/domain/modules/hired-services.module';
-import { ReviewModule } from 'src/app/domain/modules/review.module';
-import { ServicesModule } from 'src/app/domain/modules/services.module';
 
 import * as ormconfig from '../../../ormconfig';
 import { ClaimsModule } from '../../domain/modules/claim.module';
 import { CommunitiesModule } from '../../domain/modules/community.module';
+import { CreditCardModule } from '../../domain/modules/credit-card.module';
+import { HiredServicesModule } from '../../domain/modules/hired-services.module';
 import { ProviderModule } from '../../domain/modules/provider.module';
+import { ReviewModule } from '../../domain/modules/review.module';
+import { ServicesModule } from '../../domain/modules/services.module';
 import { UsersModule } from '../../domain/modules/user.module';
 import { AuthModule } from './auth.module';
 
@@ -23,6 +24,7 @@ import { AuthModule } from './auth.module';
     ServicesModule,
     ReviewModule,
     HiredServicesModule,
+    CreditCardModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       ...ormconfig,
