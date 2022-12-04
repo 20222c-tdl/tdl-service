@@ -61,7 +61,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body(ValidationPipe) updatedUser: UpdateUserDTO,
   ): Promise<User> {
-    return this.userService.updateUser(id, updatedUser);
+    return await this.userService.updateUser(id, updatedUser);
   }
 
 }

@@ -106,14 +106,14 @@ export class UsersService {
     if (!(await this.existsUser(id))) {
       throw new BadRequestException('The user does not exist!');
     }
-    this.userRepository
+    await this.userRepository
       .createQueryBuilder()
       .update(User)
       .set(updatedUser)
       .where('id = :id', { id })
       .execute();
 
-    return this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { id },
     });
   }
