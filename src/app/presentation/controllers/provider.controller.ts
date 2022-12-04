@@ -1,15 +1,32 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, ValidationPipe } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Role } from 'src/app/domain/entities/roles/role.enum';
-import { HasRoles } from 'src/app/infrastructure/decorators/has-roles.decorator';
-import { UpdateProviderDTO } from 'src/app/infrastructure/dtos/provider/provider-update.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Provider } from '../../domain/entities/provider/provider.entity';
+import { Role } from '../../domain/entities/roles/role.enum';
 import { ApiPaginatedResponse } from '../../infrastructure/decorators/api-paginated-response.decorator';
+import { HasRoles } from '../../infrastructure/decorators/has-roles.decorator';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
 import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
 import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
+import { UpdateProviderDTO } from '../../infrastructure/dtos/provider/provider-update.dto';
 import { ProviderService } from '../services/provider.service';
 
 @ApiTags('Providers')
@@ -27,7 +44,8 @@ export class ProviderController {
   @HttpCode(HttpStatus.OK)
   @ApiPaginatedResponse(Provider)
   find(
-    @Query(new ValidationPipe({ transform: true })) providerOptionsDto: ProviderOptionsDto,
+    @Query(new ValidationPipe({ transform: true }))
+    providerOptionsDto: ProviderOptionsDto,
   ): Promise<PageDto<Provider>> {
     return this.providerService.getProviders(providerOptionsDto);
   }
@@ -47,7 +65,8 @@ export class ProviderController {
   })
   @Get('/:providerId')
   async getProvider(
-      @Param('providerId') providerId: string): Promise<Provider> {
+    @Param('providerId') providerId: string,
+  ): Promise<Provider> {
     return await this.providerService.getProvider(providerId);
   }
 
@@ -66,5 +85,4 @@ export class ProviderController {
   ): Promise<Provider> {
     return this.providerService.updateProvider(id, updatedProvider);
   }
-
 }

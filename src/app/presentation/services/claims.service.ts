@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import ClaimComment from 'src/app/domain/entities/claims-comment/claim-comment.entity';
 import { Repository } from 'typeorm';
 
+import ClaimComment from '../../domain/entities/claims-comment/claim-comment.entity';
 import Claim from '../../domain/entities/claims/claim.entity';
 import { ClaimStatus } from '../../domain/entities/claims/claim.entity.status';
 import User from '../../domain/entities/users/user.entity';
@@ -13,7 +13,6 @@ import { ClaimsByUserDTO } from '../../infrastructure/dtos/claims/claims-by-user
 import { ClaimCommentService } from './claim-comment.service';
 import { CommunitiesService } from './community.service';
 import { UsersService } from './users.service';
-
 
 @Injectable()
 export class ClaimsService {
@@ -26,8 +25,9 @@ export class ClaimsService {
   ) {}
 
   public async registerClaim(newClaim: RegisterClaimDTO): Promise<Claim> {
-
-    if (!(await this.communitiesService.existsCommunity(newClaim.communityId))) {
+    if (
+      !(await this.communitiesService.existsCommunity(newClaim.communityId))
+    ) {
       throw new BadRequestException('This community does not exist!');
     }
 
@@ -35,13 +35,15 @@ export class ClaimsService {
       throw new BadRequestException('This user does not exist!');
     }
 
-    return await this.claimRepository.save(new Claim({ ...newClaim, status: ClaimStatus.OPEN }));
+    return await this.claimRepository.save(
+      new Claim({ ...newClaim, status: ClaimStatus.OPEN }),
+    );
   }
 
-
-  public async getClaimsByCommunity(claimsByCommunityDTO: ClaimsByCommunityDTO): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
+  public async getClaimsByCommunity(
+    claimsByCommunityDTO: ClaimsByCommunityDTO,
+  ): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
     const { communityId } = claimsByCommunityDTO;
-
 
     if (!(await this.communitiesService.existsCommunity(communityId))) {
       throw new BadRequestException('This community does not exist!');
@@ -55,26 +57,38 @@ export class ClaimsService {
 
     let claimsWithUser = [];
     for (const claim of claims) {
-      const user = (await this.usersService.getUserById(claim.userId));
+      const user = await this.usersService.getUserById(claim.userId);
       claimsWithUser.push({ ...claim, user });
     }
 
     return await this.attachCommentsToClaims(claimsWithUser);
   }
 
-  public async updateClaimStatus(id: string, status: ClaimStatus): Promise<Claim> {
-    await this.claimRepository.createQueryBuilder().update(Claim).set({ status }).where('id = :id', { id }).execute();
+  public async updateClaimStatus(
+    id: string,
+    status: ClaimStatus,
+  ): Promise<Claim> {
+    await this.claimRepository
+      .createQueryBuilder()
+      .update(Claim)
+      .set({ status })
+      .where('id = :id', { id })
+      .execute();
 
     return this.claimRepository.findOne({ where: { id } });
   }
 
-  public async getClaimsByUser(claimsByUserDto: ClaimsByUserDTO): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
+  public async getClaimsByUser(
+    claimsByUserDto: ClaimsByUserDTO,
+  ): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
     if (!(await this.usersService.existsUser(claimsByUserDto.userId))) {
       throw new BadRequestException('This user does not exist!');
     }
 
-    const userClaims = await this.claimRepository.find({ where: { userId: claimsByUserDto.userId } })
-    const user = (await this.usersService.getUserById(claimsByUserDto.userId));
+    const userClaims = await this.claimRepository.find({
+      where: { userId: claimsByUserDto.userId },
+    });
+    const user = await this.usersService.getUserById(claimsByUserDto.userId);
     const claimsWithUser = [];
     for (const claim of userClaims) {
       claimsWithUser.push({ ...claim, user });
@@ -83,19 +97,31 @@ export class ClaimsService {
     return await this.attachCommentsToClaims(claimsWithUser);
   }
 
-  public async updateClaim(id: string, updateClaimDto: UpdateClaimDTO): Promise<Claim> {
-    await this.claimRepository.createQueryBuilder().update(Claim).set({ ...updateClaimDto }).where('id = :id', { id }).execute();
+  public async updateClaim(
+    id: string,
+    updateClaimDto: UpdateClaimDTO,
+  ): Promise<Claim> {
+    await this.claimRepository
+      .createQueryBuilder()
+      .update(Claim)
+      .set({ ...updateClaimDto })
+      .where('id = :id', { id })
+      .execute();
 
     return this.claimRepository.findOne({ where: { id } });
   }
 
-  public async attachCommentsToClaims(claims: any[]): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]>{
+  public async attachCommentsToClaims(
+    claims: any[],
+  ): Promise<{ claim: Claim; user: User; claimComments: ClaimComment[] }[]> {
     const claimsWithComments = [];
 
     for (const claim of claims) {
       claimsWithComments.push({
         ...claim,
-        claimComments: await this.claimCommentService.getClaimComments(claim.id)
+        claimComments: await this.claimCommentService.getClaimComments(
+          claim.id,
+        ),
       });
     }
 
