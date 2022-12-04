@@ -21,22 +21,33 @@ export class HiredServicesService {
     private readonly userService: UsersService,
     private readonly servicesService: ServicesService,
   ) {}
-  
-  public async registerHiredService(newHiredServices: RegisterHiredServicesDTO): Promise<IHiredServices> {
+
+  public async registerHiredService(
+    newHiredServices: RegisterHiredServicesDTO,
+  ): Promise<IHiredServices> {
     await this.validateNewHiredServices(newHiredServices);
 
-    const savedHiredProvider = await this.hiredProvidersRepository.save(new HiredProvider({...newHiredServices, isPaid: false}));
+    const savedHiredProvider = await this.hiredProvidersRepository.save(
+      new HiredProvider({ ...newHiredServices, isPaid: false }),
+    );
     for (const hiredService of newHiredServices.hiredServices) {
-      await this.hiredServicesRepository.save(new HiredService({...hiredService, hiredProviderId: savedHiredProvider.id}));
+      await this.hiredServicesRepository.save(
+        new HiredService({
+          ...hiredService,
+          hiredProviderId: savedHiredProvider.id,
+        }),
+      );
     }
-    
-    return {...newHiredServices, id: savedHiredProvider.id};
+
+    return { ...newHiredServices, id: savedHiredProvider.id };
   }
-  
 
-
-  private async validateNewHiredServices(newHiredServices: RegisterHiredServicesDTO) {
-    if (!(await this.providerService.existsProvider(newHiredServices.providerId))) {
+  private async validateNewHiredServices(
+    newHiredServices: RegisterHiredServicesDTO,
+  ) {
+    if (
+      !(await this.providerService.existsProvider(newHiredServices.providerId))
+    ) {
       throw new BadRequestException('The provider does not exist!');
     }
     if (!(await this.userService.existsUser(newHiredServices.userId))) {
@@ -46,14 +57,16 @@ export class HiredServicesService {
     await this.hiredServicesExists(newHiredServices);
   }
 
-  private async hiredServicesExists(newHiredServices: RegisterHiredServicesDTO) {
+  private async hiredServicesExists(
+    newHiredServices: RegisterHiredServicesDTO,
+  ) {
     for (const hiredService of newHiredServices.hiredServices) {
       if (!(await this.servicesService.existsService(hiredService.serviceId)))
         throw new BadRequestException('The service does not exist!');
     }
   }
 
-  public async getHiredServicesFromUser(userId: string){
+  public async getHiredServicesFromUser(userId: string) {
     const userHiredServices = [];
 
     const userHiredProvider = await this.hiredProvidersRepository
@@ -62,37 +75,65 @@ export class HiredServicesService {
       .getMany();
 
     for (const hiredProvider of userHiredProvider) {
-      const hiredServicesIds = await this.hiredServicesRepository.find({ where: { hiredProviderId: hiredProvider.id } });
+      const hiredServicesIds = await this.hiredServicesRepository.find({
+        where: { hiredProviderId: hiredProvider.id },
+      });
       const hiredServices = [];
       for (const hiredServiceIds of hiredServicesIds)
-        hiredServices.push({...(await this.servicesService.getServiceById(hiredServiceIds.serviceId)), hours: hiredServiceIds.hours});
-      const provider = await this.providerService.getProvider(hiredProvider.providerId);
-      userHiredServices.push({hiredServices: hiredProvider, services: hiredServices, provider: provider});
+        hiredServices.push({
+          ...(await this.servicesService.getServiceById(
+            hiredServiceIds.serviceId,
+          )),
+          hours: hiredServiceIds.hours,
+        });
+      const provider = await this.providerService.getProvider(
+        hiredProvider.providerId,
+      );
+      userHiredServices.push({
+        hiredServices: hiredProvider,
+        services: hiredServices,
+        provider: provider,
+      });
     }
-    
-    
+
     return userHiredServices;
   }
-  
+
   public async updatePaidStatus(id: string, isPaid: boolean) {
-    return await this.hiredProvidersRepository.createQueryBuilder().update(HiredProvider).set({ isPaid }).where('id = :id', { id }).execute();
+    return await this.hiredProvidersRepository
+      .createQueryBuilder()
+      .update(HiredProvider)
+      .set({ isPaid })
+      .where('id = :id', { id })
+      .execute();
   }
 
   public async deleteHiredServices(hiredServiceId: string) {
-    if (!(await this.hiredProvidersRepository.findOne({ where: {id: hiredServiceId} })))
+    if (
+      !(await this.hiredProvidersRepository.findOne({
+        where: { id: hiredServiceId },
+      }))
+    )
       throw new BadRequestException('The hired service does not exist!');
     this.hiredServicesRepository
       .delete({ hiredProviderId: hiredServiceId })
       .then(() => this.hiredProvidersRepository.delete({ id: hiredServiceId }));
   }
 
-  async existsHiredProvider(hiredServicesId: string, userId: string, providerId: string) {
-    const hiredProvider = await this.hiredProvidersRepository.findOne({ where: { id: hiredServicesId } });
+  async existsHiredProvider(
+    hiredServicesId: string,
+    userId: string,
+    providerId: string,
+  ) {
+    const hiredProvider = await this.hiredProvidersRepository.findOne({
+      where: { id: hiredServicesId },
+    });
 
-    if (!hiredProvider) 
-      return false;
+    if (!hiredProvider) return false;
     else
-      return hiredProvider.userId === userId && hiredProvider.providerId === providerId;
-
+      return (
+        hiredProvider.userId === userId &&
+        hiredProvider.providerId === providerId
+      );
   }
 }

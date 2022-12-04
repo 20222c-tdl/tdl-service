@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserPasswordDTO } from 'src/app/infrastructure/dtos/users/user-update-password.dto';
-import { UpdateUserDTO } from 'src/app/infrastructure/dtos/users/user-update.dto';
 import { Repository } from 'typeorm';
 
 import User from '../../domain/entities/users/user.entity';
 import { LoginDTO } from '../../infrastructure/dtos/common/login.dto';
 import { RegisterUserDTO } from '../../infrastructure/dtos/users/user-register.dto';
+import { UpdateUserPasswordDTO } from '../../infrastructure/dtos/users/user-update-password.dto';
+import { UpdateUserDTO } from '../../infrastructure/dtos/users/user-update.dto';
 import { CommunitiesService } from './community.service';
 
 @Injectable()
@@ -78,7 +78,10 @@ export class UsersService {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  public async updateUserPassword(id: string, updatedUserPassword: UpdateUserPasswordDTO): Promise<User> {
+  public async updateUserPassword(
+    id: string,
+    updatedUserPassword: UpdateUserPasswordDTO,
+  ): Promise<User> {
     if (!(await this.existsUser(id))) {
       throw new BadRequestException('The user does not exist!');
     }
@@ -89,7 +92,9 @@ export class UsersService {
       throw new BadRequestException('The password is not correct!');
     }
 
-    const passwordUpdate = { password: bcrypt.hashSync(updatedUserPassword.newPassword, 10)};
+    const passwordUpdate = {
+      password: bcrypt.hashSync(updatedUserPassword.newPassword, 10),
+    };
     this.userRepository
       .createQueryBuilder()
       .update(User)
@@ -98,11 +103,14 @@ export class UsersService {
       .execute();
 
     return this.userRepository.findOne({
-        where: { id },
+      where: { id },
     });
   }
 
-  public async updateUser(id: string, updatedUser: UpdateUserDTO): Promise<User> {
+  public async updateUser(
+    id: string,
+    updatedUser: UpdateUserDTO,
+  ): Promise<User> {
     if (!(await this.existsUser(id))) {
       throw new BadRequestException('The user does not exist!');
     }
@@ -116,5 +124,15 @@ export class UsersService {
     return await this.userRepository.findOne({
       where: { id },
     });
+  }
+
+  public async getUserProfile(id: string): Promise<User> {
+    const userProfile = await this.userRepository.findOne({ where: { id } });
+
+    if (!userProfile) {
+      throw new BadRequestException('The user does not exist!');
+    }
+
+    return userProfile;
   }
 }

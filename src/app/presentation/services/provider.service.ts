@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { UpdateProviderDTO } from 'src/app/infrastructure/dtos/provider/provider-update.dto';
 import { Brackets, Repository } from 'typeorm';
 
 import { Provider } from '../../domain/entities/provider/provider.entity';
@@ -10,6 +9,7 @@ import { PageMetaDto } from '../../infrastructure/dtos/common/pagination/page-me
 import { PageDto } from '../../infrastructure/dtos/common/pagination/page.dto';
 import { CreateProviderDto } from '../../infrastructure/dtos/provider/create-provider.dto';
 import { ProviderOptionsDto } from '../../infrastructure/dtos/provider/provider-options.dto';
+import { UpdateProviderDTO } from '../../infrastructure/dtos/provider/provider-update.dto';
 import { ReviewService } from './review.service';
 
 @Injectable()
@@ -47,26 +47,33 @@ export class ProviderService {
       const searchedWords = providerOptionsDto.searchedWords.split(' ');
       queryBuilder.andWhere(
         new Brackets((qb) => {
-          queryBuilder.where('(provider.firstName like :word OR provider.lastName like :word)', { word: `%${searchedWords.pop()}%` })
+          queryBuilder.where(
+            '(provider.firstName like :word OR provider.lastName like :word)',
+            { word: `%${searchedWords.pop()}%` },
+          );
           for (const word of searchedWords) {
             queryBuilder.orWhere(
-              '(provider.firstName like :word OR provider.lastName like :word)', { word: `%${word}%` }
+              '(provider.firstName like :word OR provider.lastName like :word)',
+              { word: `%${word}%` },
             );
           }
-          
-        })
-      )
-      
+        }),
+      );
     }
 
     const itemCount = await queryBuilder.getCount();
     const providers = await (await queryBuilder.getRawAndEntities()).entities;
 
-    const providersWithRating = []
+    const providersWithRating = [];
     for (const provider of providers) {
-      const rating = await this.reviewService.getReviewsFromProvider(provider.id)
-      providersWithRating.push({provider: provider, totalRating: rating.totalRating, reviewCount: rating.reviews.length})
-
+      const rating = await this.reviewService.getReviewsFromProvider(
+        provider.id,
+      );
+      providersWithRating.push({
+        provider: provider,
+        totalRating: rating.totalRating,
+        reviewCount: rating.reviews.length,
+      });
     }
 
     const pageMetaDto = new PageMetaDto(providerOptionsDto, itemCount);
@@ -127,7 +134,10 @@ export class ProviderService {
       .getOne();
   }
 
-  public async updateProvider(id: string, updatedProvider: UpdateProviderDTO): Promise<Provider> {
+  public async updateProvider(
+    id: string,
+    updatedProvider: UpdateProviderDTO,
+  ): Promise<Provider> {
     if (!(await this.existsProvider(id))) {
       throw new BadRequestException('The provider does not exist!');
     }

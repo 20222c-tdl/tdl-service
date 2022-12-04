@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Role } from '../../domain/entities/roles/role.enum';
@@ -62,6 +62,18 @@ export class UsersController {
     @Body(ValidationPipe) updatedUser: UpdateUserDTO,
   ): Promise<User> {
     return await this.userService.updateUser(id, updatedUser);
+  }
+
+  @HasRoles(Role.USER)
+  @ApiParam({
+    name: 'id',
+    description: 'ID necessary for getting user profile',
+    required: true,
+    type: String,
+  })
+  @Get('/:id/profile')
+  async getUserProfile(@Param('id') id: string): Promise<User> {
+    return await this.userService.getUserProfile(id);
   }
 
 }
