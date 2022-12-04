@@ -1,19 +1,27 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBase64, IsEmail, IsUUID, MinLength } from 'class-validator';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-export class CreateProviderDto {
-  @ApiProperty({ type: String, description: 'Email' })
-  @IsEmail()
-  id: string;
+@Entity()
+class PlaceReservation {
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;
 
-  @ApiProperty({ type: String, description: 'Place Id' })
-  @IsUUID()
+  @Column()
   placeId: string;
 
-  @ApiProperty({ type: String, description: 'User Id' })
-  @IsUUID()
+  @Column()
   userId: string;
 
-  @ApiProperty({ type: Date, description: 'Starting Date' })
+  @Column()
   startingDate: Date;
+
+  @Column()
+  finishingDate: Date;
+
+  constructor(partial: Partial<PlaceReservation>) {
+    Object.assign(this, partial);
+  }
+
 }
+
+export default PlaceReservation;
+

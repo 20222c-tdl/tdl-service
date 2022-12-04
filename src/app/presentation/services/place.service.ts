@@ -30,4 +30,8 @@ export class PlaceService {
     return await this.placeRepository.find({ where: { communityId } });
   }
 
+  public async existsPlace(placeId: string): Promise<boolean> {
+    return !! (await this.placeRepository.find({ where: { id: placeId } }));
+  }
+
 }

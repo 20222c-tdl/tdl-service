@@ -23,7 +23,6 @@ class Review {
   constructor(partial: Partial<Review>) {
     Object.assign(this, partial);
   }
-
 }
 
 export default Review;

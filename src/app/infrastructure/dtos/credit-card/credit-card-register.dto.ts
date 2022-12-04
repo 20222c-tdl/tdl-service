@@ -15,8 +15,8 @@ export class RegisterCreditCardDTO {
   @MinLength(2)
   name: string;
 
-  @ApiProperty({ type: Date, description: 'Expiration date' })
-  expirationDate: Date;
+  @ApiProperty({ type: String, description: 'Expiration date' })
+  expirationDate: string;
 
   @ApiProperty({ type: String, description: 'CVC' })
   @MinLength(3)
