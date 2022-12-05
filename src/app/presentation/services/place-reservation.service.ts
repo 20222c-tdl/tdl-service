@@ -23,8 +23,10 @@ export class PlaceReservationService {
       throw new BadRequestException('The user does not exist!');
     if (!this.placeService.existsPlace(newPlaceReservation.placeId))
       throw new BadRequestException('The place does not exist!');
-    if (!(await this.validateDates(newPlaceReservation)))
-      throw new BadRequestException('The dates are not valid!');
+
+    // TODO: Validate dates
+    //if (!(await this.validateDates(newPlaceReservation)))
+    //  throw new BadRequestException('The dates are not valid!');
 
     return await this.placeReservationRepository.save(
       new PlaceReservation(newPlaceReservation),
