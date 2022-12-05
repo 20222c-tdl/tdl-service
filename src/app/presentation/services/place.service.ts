@@ -61,4 +61,8 @@ export class PlaceService {
 
     return place;
   }
+
+  public async getPlace(id: string) {
+    return await this.placeRepository.findOne({ where: { id } });
+  }
 }
