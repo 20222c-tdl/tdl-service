@@ -14,5 +14,5 @@ export class RegisterPlaceReservationDTO {
   startingDate: Date;
 
   @ApiProperty({ type: Date, description: 'Starting Date' })
-  endingDate: Date;
+  finishingDate: Date;
 }
