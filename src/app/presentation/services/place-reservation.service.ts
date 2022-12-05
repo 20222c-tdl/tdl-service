@@ -93,9 +93,16 @@ export class PlaceReservationService {
     if (!this.userService.existsUser(userId))
       throw new BadRequestException('The user does not exist!');
 
-    return await this.placeReservationRepository
+    const placeReservations = await this.placeReservationRepository
       .createQueryBuilder('placeReservation')
       .where('placeReservation.userId = :userId', { userId })
       .getMany();
+
+    const placeReservationsWithPlace = [];
+    for (const placeReservation of placeReservations) {
+      placeReservationsWithPlace.push({reservation: placeReservation, place: await this.placeService.getPlace(placeReservation.placeId)})
+    }
+
+    return placeReservationsWithPlace;
   }
 }
