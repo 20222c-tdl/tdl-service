@@ -25,8 +25,8 @@ export class PlaceReservationService {
       throw new BadRequestException('The place does not exist!');
 
     // TODO: Validate dates
-    //if (!(await this.validateDates(newPlaceReservation)))
-    //  throw new BadRequestException('The dates are not valid!');
+    if (!(await this.validateDates(newPlaceReservation)))
+      throw new BadRequestException('The dates are not valid!');
 
     return await this.placeReservationRepository.save(
       new PlaceReservation(newPlaceReservation),
@@ -34,7 +34,7 @@ export class PlaceReservationService {
   }
 
   private async validateDates(placeReservation: RegisterPlaceReservationDTO) {
-    if (placeReservation.startingDate > placeReservation.endingDate)
+    if (placeReservation.startingDate > placeReservation.finishingDate)
       throw new BadRequestException(
         'The start date must be before the end date!',
       );
@@ -51,17 +51,17 @@ export class PlaceReservationService {
               new Brackets((qb) => {
                 qb.where('placeReservation.startingDate <= :startingDate', {
                   startingDate: placeReservation.startingDate,
-                }).andWhere('placeReservation.endingDate >= :startingDate', {
+                }).andWhere('placeReservation.finishingDate >= :startingDate', {
                   startingDate: placeReservation.startingDate,
                 });
               }),
             )
             .orWhere(
               new Brackets((qb) => {
-                qb.where('placeReservation.startingDate <= :endingDate', {
-                  endingDate: placeReservation.endingDate,
-                }).andWhere('placeReservation.endingDate >= :endingDate', {
-                  endingDate: placeReservation.endingDate,
+                qb.where('placeReservation.startingDate <= :finishingDate', {
+                  finishingDate: placeReservation.finishingDate,
+                }).andWhere('placeReservation.finishingDate >= :finishingDate', {
+                  finishingDate: placeReservation.finishingDate,
                 });
               }),
             )
@@ -69,8 +69,8 @@ export class PlaceReservationService {
               new Brackets((qb) => {
                 qb.where('placeReservation.startingDate >= :startingDate', {
                   startingDate: placeReservation.startingDate,
-                }).andWhere('placeReservation.endingDate <= :endingDate', {
-                  endingDate: placeReservation.endingDate,
+                }).andWhere('placeReservation.finishingDate <= :finishingDate', {
+                  finishingDate: placeReservation.finishingDate,
                 });
               }),
             )
@@ -78,8 +78,8 @@ export class PlaceReservationService {
               new Brackets((qb) => {
                 qb.where('placeReservation.startingDate <= :startingDate', {
                   startingDate: placeReservation.startingDate,
-                }).andWhere('placeReservation.endingDate >= :endingDate', {
-                  endingDate: placeReservation.endingDate,
+                }).andWhere('placeReservation.finishingDate >= :finishingDate', {
+                  finishingDate: placeReservation.finishingDate,
                 });
               }),
             );
